@@ -719,8 +719,12 @@ function getSalesInfo(intent, session, callback) {
                         " sales in the " + SalesQuarter + " quarter of " + SalesYear;
 
                 } else {
+                    var totalSales = 0;
+                    for (var i = 0; i < response.length; i++ ){
+                        totalSales += Math.round(response[i].NetAmount,2);
+                    }
                     speechOutput = "The sales for the " + stringQuarter(b1Quarter) + " quarter of " +
-                        SalesYear + " are " + response[0].NetAmount + " " +
+                        SalesYear + " are " + totalSales + " " +
                         response[0].currencyCode + ".";
                 }
                 shouldEndSession = true;
