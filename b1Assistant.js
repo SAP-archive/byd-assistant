@@ -913,13 +913,13 @@ function restCall(endPoint, filter, response) {
     console.log('start request to ' + options.uri)
 
     http.get(options, function (error, res, body) {
+        console.log("Response: " + res.statusCode);
         if (!error && res.statusCode == 200) {
-            console.log("Response: " + res.statusCode);
             var parsed = JSON.parse(body);
             response(parsed);
         }
         else {
-            console.log("Error message: " + e.message);
+            console.log("Error message: " + error);
             response(false)
 
         }
