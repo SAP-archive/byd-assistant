@@ -8,8 +8,8 @@
  */
 
 var g_hdbServer = process.env.SMB_SERVER;
-var g_hdbPort   = process.env.SMB_PORT;
-var g_hdbService= process.env.SMB_PATH;;
+var g_hdbPort = process.env.SMB_PORT;
+var g_hdbService = process.env.SMB_PATH;;
 
 var g_currFinPeriod = null;
 var SocialMediaIntegration = false // Set this to true in case Twitter Integration is deployed
@@ -156,10 +156,6 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // --------------- Functions that control the skill's behavior -----------------------
 function getWelcomeResponse(callback) {
-    // If we wanted to initialize the session to have some attributes we could add those here.
-    if (null === g_currFinPeriod) {
-        initB1PeriodByDate();
-    }
 
     var sessionAttributes = {};
     var cardTitle = "Welcome";
@@ -185,7 +181,7 @@ function handleSessionEndRequest(callback) {
     callback({}, buildSpeechletResponse(cardTitle, speechOutput, null, shouldEndSession));
 }
 
-function SocialMediaIntegrationActive(){
+function SocialMediaIntegrationActive() {
     return SocialMediaIntegration;
 }
 
@@ -283,7 +279,7 @@ function getSocialMediaInfo(intent, session, callback) {
     var shouldEndSession = true;
     var speechOutput = "";
 
-    if (!SocialMediaIntegrationActive()){
+    if (!SocialMediaIntegrationActive()) {
         speechOutput = "I am sorry, Social Media integration is not active on Be One Assistant"
         callback(sessionAttributes,
             buildSpeechletResponse(
@@ -350,7 +346,7 @@ function getSocialMediaInfo(intent, session, callback) {
                         var tweetAboutProbSpeech = "";
                         if (response.TweetCountWithProblem > 0)
                             tweetAboutProbSpeech = " Including " + response.TweetCountWithProblem + " tweets " +
-                            formatPerc(response.ProblemPerc) + " talking about the product problems."
+                                formatPerc(response.ProblemPerc) + " talking about the product problems."
 
                         hasSentimentTweetSpeech = response.TweetCountWithSentiment +
                             " tweets with sentiments. Among them, " + response.PositiveTweetCount +
@@ -391,8 +387,8 @@ function readTweets(intent, session, callback) {
     var sessionAttributes = {};
     var shouldEndSession = true;
     var speechOutput = "";
-    
-    if (!SocialMediaIntegrationActive()){
+
+    if (!SocialMediaIntegrationActive()) {
         speechOutput = "I am sorry, Social Media integration is not active on B1 Assistant"
         callback(sessionAttributes,
             buildSpeechletResponse(
@@ -659,7 +655,7 @@ function getSalesInfo(intent, session, callback) {
     console.log(JSON.stringify(session));
 
 
-   // var ItemGroup = extractValue('ItemGroup', intent, session)
+    // var ItemGroup = extractValue('ItemGroup', intent, session)
     var SalesQuarter = extractValue('SalesQuarter', intent, session)
     var SalesYear = extractValue('SalesYear', intent, session)
     /**  
@@ -683,7 +679,7 @@ function getSalesInfo(intent, session, callback) {
         speechOutput = "Which Item Group do you want to know?";
         repromptText = "For example, Servers or Laser Printers?";
     } else */
-    
+
     if (SalesQuarter == null) {
         speechOutput = "Got it! What quarter?";
         repromptText = "Tell me the quarter and the year.";
@@ -693,18 +689,18 @@ function getSalesInfo(intent, session, callback) {
     } else {
 
         var b1Quarter = formatQuarter(SalesQuarter);
-       //ItemGroup = formatItemGrp(ItemGroup);
-       /*
-        var oDataFilter = 'ITEMGROUP' + op('eq') + quotes(ItemGroup) + op('and') +
-            'DUE_QUARTER' + op('eq') + quotes(b1Quarter) + op('and') +
-            'DUE_YEAR' + op('eq') + quotes(SalesYear);
-        */
-        
-        var oDataEndpoint =  "/SalesOrderCollection"
-        var oDataFilter =   '$select=NetAmount,currencyCode,DateTime&$filter='+ 
-                            'DateTime' + op('ge') + beginQuarter(b1Quarter,SalesYear) + op('and') +
-                            'DateTime' + op('le') + endQuarter(b1Quarter,SalesYear);
-        
+        //ItemGroup = formatItemGrp(ItemGroup);
+        /*
+         var oDataFilter = 'ITEMGROUP' + op('eq') + quotes(ItemGroup) + op('and') +
+             'DUE_QUARTER' + op('eq') + quotes(b1Quarter) + op('and') +
+             'DUE_YEAR' + op('eq') + quotes(SalesYear);
+         */
+
+        var oDataEndpoint = "/SalesOrderCollection"
+        var oDataFilter = '$select=NetAmount,currencyCode,DateTime&$filter=' +
+            'DateTime' + op('ge') + beginQuarter(b1Quarter, SalesYear) + op('and') +
+            'DateTime' + op('le') + endQuarter(b1Quarter, SalesYear);
+
         //Avoid unescaped characters
         oDataFilter = oDataFilter.replace(/ /g, "%20");
 
@@ -712,14 +708,14 @@ function getSalesInfo(intent, session, callback) {
 
         restCall(
             oDataEndpoint, // Endpoint
-            "?$format=json&"+ oDataFilter, //Filter
+            "?$format=json&" + oDataFilter, //Filter
 
             function (response) {
                 console.log("response is " + response);
                 response = response.d.results;
 
                 if (response.length == 0) {
-                    speechOutput = "I am sorry, but there are no" + 
+                    speechOutput = "I am sorry, but there are no" +
                         " sales in the " + SalesQuarter + " quarter of " + SalesYear;
 
                 } else {
@@ -900,38 +896,30 @@ function postPurchase(intent, session, callback) {
 
 function restCall(endPoint, filter, response) {
 
-    var http = require('http');
+    var http = require('request');
     var options = {
-        host: g_hdbServer,
-        port: g_hdbPort,
-        path: g_hdbService + endPoint + filter,
-        agent: false,
-        timeout: 50000
+        uri: g_hdbServer+g_hdbPort+g_hdbService + endPoint + filter,
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Basic " + process.env.SMB_AUTH,
+        }
     };
 
-    console.log('start request to ' + g_hdbServer + ":" + g_hdbPort + g_hdbService + endPoint + filter)
+    console.log('start request to ' + options.uri)
 
-    http.get(options, function (res) {
-        var body = '';
-
-        console.log("Response: " + res.statusCode);
-
-        res.on('data', function (d) {
-            console.log('BODY CHUNK: ' + d);
-            body += d;
-        });
-
-        res.on('end', function () {
-            console.log('BODY END ' + body);
+    http.get(options, function (error, res, body) {
+        if (!error && res.statusCode == 200) {
+            console.log("Response: " + res.statusCode);
             var parsed = JSON.parse(body);
             response(parsed);
+        }
+        else {
+            console.log("Error message: " + e.message);
+            response(false)
 
-        });
-    }).on('error', function (e) {
-        console.log("Error message: " + e.message);
-        response(false)
-    })
-
+        }
+    });
 }
 
 // --------------- Handle of Session variables -----------------------
@@ -1022,52 +1010,52 @@ function stringQuarter(input) {
 
 }
 
-function beginQuarter(quarter, year){
-    
-    var ret ='datetimeoffset'
-    
-    if (quarter == '01'|| quarter == 'Q1') {
-        ret += quotes(year+"01-01T00:00:01Z")
+function beginQuarter(quarter, year) {
+
+    var ret = 'datetimeoffset'
+
+    if (quarter == '01' || quarter == 'Q1') {
+        ret += quotes(year + "-01-01T00:00:01Z")
         return ret
     }
 
     if (quarter == '02' || quarter == 'Q2') {
-        ret += quotes(year+"04-01T00:00:01Z")
+        ret += quotes(year + "-04-01T00:00:01Z")
         return ret
     }
 
     if (quarter == '03' || quarter == 'Q3') {
-        ret += quotes(year+"07-01T00:00:01Z")
+        ret += quotes(year + "-07-01T00:00:01Z")
         return ret
     }
 
     if (quarter == '04' || quarter == 'Q4') {
-        ret += quotes(year+"10-01T00:00:01Z")
+        ret += quotes(year + "-10-01T00:00:01Z")
         return ret
     }
 }
 
-function endQuarter(quarter, year){
-    
-    var ret ='datetimeoffset'
-    
-    if (quarter == '01'|| quarter == 'Q1') {
-        ret += quotes(year+"03-31T23:59:59Z")
+function endQuarter(quarter, year) {
+
+    var ret = 'datetimeoffset'
+
+    if (quarter == '01' || quarter == 'Q1') {
+        ret += quotes(year + "-03-31T23:59:59Z")
         return ret
     }
 
     if (quarter == '02' || quarter == 'Q2') {
-        ret += quotes(year+"06-30T23:59:59Z")
+        ret += quotes(year + "-06-30T23:59:59Z")
         return ret
     }
 
     if (quarter == '03' || quarter == 'Q3') {
-        ret += quotes(year+"09-30T23:59:59Z")
+        ret += quotes(year + "-09-30T23:59:59Z")
         return ret
     }
 
     if (quarter == '04' || quarter == 'Q4') {
-        ret += quotes(year+"12-31T23:59:59Z")
+        ret += quotes(year + "-12-31T23:59:59Z")
         return ret
     }
 }
