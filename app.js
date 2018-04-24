@@ -32,7 +32,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const b1Assistant = require('./b1Assistant.js');
 const app = express();
-const PORT = process.env.PORT || 46999;
+const PORT = process.env.PORT || 8089;
 
 app.use(({
     method,

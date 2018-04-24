@@ -46,7 +46,6 @@ SalesInfo show me sales info
 SalesInfo show me sales information
 SalesInfo show me sales reports
 SalesInfo show me sales numbers
-SalesInfo {ItemGroup}
 SalesInfo {SalesQuarter}
 SalesInfo {SalesQuarter} of {SalesYear}
 SalesInfo {SalesQuarter} quarter of {SalesYear}

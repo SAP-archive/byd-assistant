@@ -1,23 +1,16 @@
 /**
- * This code implements an integration of SAP Business One on HANA with Amazon Alexa
+ * This code implements an integration of SAP Business By Design with Amazon Echo
+ * It is a fork from the B1 Assistant - A SAP Business One Integration with Amazon Echo (https://github.com/B1SA/b1Assistant/)
  * 
- * For instrunctions and changelog please check the GitHub Repository
+ * For instrunctions, changelog and License please check the GitHub Repository
+ * - https://github.com/Ralphive/byDAssistant
  * 
- * Athors: 
- * Ralph Oliveira - B1 Solution Architect - Twitter: @Ralphive
- * Yatsea Li - Solution Architect - Twitter: @YatseaLi
- * All rights resversed by SAP SE
- * last mondifed on Mar 27 2017
- * License: This is not an offiical solution from SAP. The code is published with SCN AS-IS license.
- * You can download and modify this code by yourself. No SAP official support available.
  */
 
-// Route the incoming request based on type (LaunchRequest, IntentRequest,
-// etc.) The JSON body of the request is provided in the event parameter.
+var g_hdbServer = process.env.SMB_SERVER;
+var g_hdbPort   = process.env.SMB_PORT;
+var g_hdbService= process.env.SMB_PATH;;
 
-var g_hdbServer = '<YOUR HANA HOST or IP Address HERE!>';
-var g_hdbPort  = 8000; // Http(8000) or Https(4300)
-var g_hdbService = '/b1Assistant/services';
 var g_currFinPeriod = null;
 var SocialMediaIntegration = false // Set this to true in case Twitter Integration is deployed
 
@@ -666,7 +659,7 @@ function getSalesInfo(intent, session, callback) {
     console.log(JSON.stringify(session));
 
 
-    var ItemGroup = extractValue('ItemGroup', intent, session)
+   // var ItemGroup = extractValue('ItemGroup', intent, session)
     var SalesQuarter = extractValue('SalesQuarter', intent, session)
     var SalesYear = extractValue('SalesYear', intent, session)
     /**  
@@ -674,22 +667,24 @@ function getSalesInfo(intent, session, callback) {
       SalesQuarter = 'first';
       SalesYear = '2009';
       **/
-    console.log("ItemGroup Extraido " + ItemGroup);
+    //console.log("ItemGroup Extraido " + ItemGroup);
     console.log("SalesQuarter Extraido " + SalesQuarter);
     console.log("SalesYear Extraido " + SalesYear);
 
 
-    sessionAttributes = handleSessionAttributes(sessionAttributes, 'ItemGroup', ItemGroup);
+    //sessionAttributes = handleSessionAttributes(sessionAttributes, 'ItemGroup', ItemGroup);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'SalesQuarter', SalesQuarter);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'SalesYear', SalesYear);
 
     console.log("Vao ser exportados " + JSON.stringify(sessionAttributes));
 
 
-    if (ItemGroup == null) {
+    /*if (ItemGroup == null) {
         speechOutput = "Which Item Group do you want to know?";
         repromptText = "For example, Servers or Laser Printers?";
-    } else if (SalesQuarter == null) {
+    } else */
+    
+    if (SalesQuarter == null) {
         speechOutput = "Got it! What quarter?";
         repromptText = "Tell me the quarter and the year.";
     } else if (SalesYear == null) {
@@ -698,34 +693,40 @@ function getSalesInfo(intent, session, callback) {
     } else {
 
         var b1Quarter = formatQuarter(SalesQuarter);
-        ItemGroup = formatItemGrp(ItemGroup);
+       //ItemGroup = formatItemGrp(ItemGroup);
+       /*
         var oDataFilter = 'ITEMGROUP' + op('eq') + quotes(ItemGroup) + op('and') +
             'DUE_QUARTER' + op('eq') + quotes(b1Quarter) + op('and') +
             'DUE_YEAR' + op('eq') + quotes(SalesYear);
-
-        oDataFilter = oDataFilter.replace(/ /g, "%20"); // Avoid unescaped characters
+        */
+        
+        var oDataEndpoint =  "/SalesOrderCollection"
+        var oDataFilter =   '$select=NetAmount,currencyCode,DateTime&$filter='+ 
+                            'DateTime' + op('ge') + beginQuarter(b1Quarter,SalesYear) + op('and') +
+                            'DateTime' + op('le') + endQuarter(b1Quarter,SalesYear);
+        
+        //Avoid unescaped characters
+        oDataFilter = oDataFilter.replace(/ /g, "%20");
 
         console.log('OdataFilter = ' + oDataFilter);
 
         restCall(
-            "/sales.xsodata/ItemGroup", // Endpoint
-            "?$format=json&$filter=" + oDataFilter, //Filter
+            oDataEndpoint, // Endpoint
+            "?$format=json&"+ oDataFilter, //Filter
 
             function (response) {
                 console.log("response is " + response);
                 response = response.d.results;
 
                 if (response.length == 0) {
-                    speechOutput = "I am sorry, but there are no " + ItemGroup +
+                    speechOutput = "I am sorry, but there are no" + 
                         " sales in the " + SalesQuarter + " quarter of " + SalesYear;
 
                 } else {
-                    speechOutput = "The sales of " + response[0].ITEMGROUP +
-                        " For the " + stringQuarter(b1Quarter) + " quarter of " +
-                        SalesYear + " are " + response[0].SumLineTotal + " " +
-                        response[0].ChkName + ".";
+                    speechOutput = "The sales for the " + stringQuarter(b1Quarter) + " quarter of " +
+                        SalesYear + " are " + response[0].NetAmount + " " +
+                        response[0].currencyCode + ".";
                 }
-
                 shouldEndSession = true;
 
                 // call back with result
@@ -1019,6 +1020,56 @@ function stringQuarter(input) {
         return 'fourth';
     }
 
+}
+
+function beginQuarter(quarter, year){
+    
+    var ret ='datetimeoffset'
+    
+    if (quarter == '01'|| quarter == 'Q1') {
+        ret += quotes(year+"01-01T00:00:01Z")
+        return ret
+    }
+
+    if (quarter == '02' || quarter == 'Q2') {
+        ret += quotes(year+"04-01T00:00:01Z")
+        return ret
+    }
+
+    if (quarter == '03' || quarter == 'Q3') {
+        ret += quotes(year+"07-01T00:00:01Z")
+        return ret
+    }
+
+    if (quarter == '04' || quarter == 'Q4') {
+        ret += quotes(year+"10-01T00:00:01Z")
+        return ret
+    }
+}
+
+function endQuarter(quarter, year){
+    
+    var ret ='datetimeoffset'
+    
+    if (quarter == '01'|| quarter == 'Q1') {
+        ret += quotes(year+"03-31T23:59:59Z")
+        return ret
+    }
+
+    if (quarter == '02' || quarter == 'Q2') {
+        ret += quotes(year+"06-30T23:59:59Z")
+        return ret
+    }
+
+    if (quarter == '03' || quarter == 'Q3') {
+        ret += quotes(year+"09-30T23:59:59Z")
+        return ret
+    }
+
+    if (quarter == '04' || quarter == 'Q4') {
+        ret += quotes(year+"12-31T23:59:59Z")
+        return ret
+    }
 }
 
 /***
