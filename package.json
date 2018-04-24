@@ -2,7 +2,7 @@
   "name": "b1assistant",
   "description": "Standalone B1Assistant Alexa App",
   "scripts": {
-    "start": "node b1Assistant_standalone.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "body-parser": "^1.17.2",

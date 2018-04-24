@@ -1,36 +1,6 @@
 SayHello Say hi to {FirstName}
 SayHello Salute our friend {FirstName}
 
-BusinessInfo how is business
-BusinessInfo how is business going
-BusinessInfo how is business doing
-BusinessInfo how is my business
-BusinessInfo how is my business going
-BusinessInfo how is my business doing
-BusinessInfo get me business info
-BusinessInfo get me business information
-BusinessInfo get me business result
-BusinessInfo get me business update
-BusinessInfo give me business info
-BusinessInfo give me business information
-BusinessInfo give me business result
-BusinessInfo give me business update
-BusinessInfo give me business status
-BusinessInfo update me business info
-BusinessInfo update me business information
-BusinessInfo update me business result
-BusinessInfo update me business status
-BusinessInfo tell me business info
-BusinessInfo tell me business information
-BusinessInfo tell me business result
-BusinessInfo tell me business status
-BusinessInfo tell me business update
-BusinessInfo show me business info
-BusinessInfo show me business information
-BusinessInfo show me business result
-BusinessInfo show me business status
-BusinessInfo show me business update
-
 GetTopItems what are my best selling products
 GetTopItems what are my best selling items
 GetTopItems what are my top items
