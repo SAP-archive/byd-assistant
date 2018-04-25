@@ -1,6 +1,7 @@
 /**
- * This code implements an integration of SAP Business By Design with Amazon Echo
- * It is a fork from the B1 Assistant - A SAP Business One Integration with Amazon Echo (https://github.com/B1SA/b1Assistant/)
+ * This code implements an integration of SAP Business by Design with Amazon Echo
+ * It is a fork from the B1 Assistant - A SAP Business One Integration with Amazon Echo 
+ * See at: (https://github.com/B1SA/b1Assistant/)
  * 
  * For instrunctions, changelog and License please check the GitHub Repository
  * - https://github.com/Ralphive/byDAssistant
@@ -216,7 +217,7 @@ function getBusinessInfo(intent, session, callback) {
     console.log("SESSION RECEIVED");
     console.log(JSON.stringify(session));
 
-    restCall(
+    getCall(
         "/getBusinessInfo.xsjs", // Endpoint
         "", //Filter
         function (response) {
@@ -297,7 +298,7 @@ function getSocialMediaInfo(intent, session, callback) {
     console.log(JSON.stringify(session));
 
     if (intent.name === "AMAZON.YesIntent") {
-        restCall(
+        getCall(
             "/SocialMediaInfo.xsodata/B1TweetSentiments", // Endpoint
             "?$format=json&$top=1&$select=UserName,Text,CreateAt&$filter=TA_TYPE%20eq%20%27StrongNegativeSentiment%27%20or%20TA_TYPE%20eq%20%27WeakNegativeSentiment%27%20&$orderby=CreateAt%20desc,TA_TYPE%20asc", //Filter
             function (response) {
@@ -330,7 +331,7 @@ function getSocialMediaInfo(intent, session, callback) {
             )
         );
     } else {
-        restCall(
+        getCall(
             "/getSocialMediaInfo.xsjs", // Endpoint
             "", //Filter
             function (response) {
@@ -415,7 +416,7 @@ function readTweets(intent, session, callback) {
     } else {
 
         sentimentType = formatSentiment(Sentiments);
-        restCall(
+        getCall(
             "/SocialMediaInfo.xsodata/B1TweetSentiments", // Endpoint
             "?$format=json&$select=UserName,Text,CreateAt&$filter=TA_TYPE%20eq%20%27" + sentimentType + "%27&$orderby=CreateAt%20desc", //Filter
             function (response) {
@@ -466,7 +467,7 @@ function getTopItems(intent, session, callback) {
         speechOutput = "Got it! How many top items?";
         repromptText = "Tell me top 3 or top 5.";
     } else {
-        restCall(
+        getCall(
             "/BusinessInfo.xsodata/SalesAnalysisQuery", // Endpoint
             "?$format=json&$select=ItemCode,ItemDescription&$top=" + TopNo + "&$orderby=NetSalesAmountLC%20desc", //Filter
 
@@ -526,7 +527,7 @@ function getSalesGroups(intent, session, callback) {
     var shouldEndSession = true;
     var speechOutput = "";
 
-    restCall(
+    getCall(
         "/sales.xsodata/ItemGroupAll(" + quotes(GroupFilter) + ")", // Endpoint
         "?$format=json", // Filter
 
@@ -570,7 +571,7 @@ function saleRecommend(intent, session, callback) {
         params = params.replace(/ /g, "%20"); // Avoid unescaped characters
         console.log('XSJS Params= ' + params);
 
-        restCall(
+        getCall(
             "/b1Call.xsjs", // Endpoint
             params, //Parameters
 
@@ -603,7 +604,7 @@ function saleRecommend(intent, session, callback) {
         sessionAttributes = handleSessionAttributes(sessionAttributes, 'PreviousIntent', intent.name);
     }
 
-    restCall(
+    getCall(
         "/b1Call.xsjs", // Endpoint
         "?action=SalesRecommend", // Filter
 
@@ -706,7 +707,7 @@ function getSalesInfo(intent, session, callback) {
 
         console.log('OdataFilter = ' + oDataFilter);
 
-        restCall(
+        getCall(
             oDataEndpoint, // Endpoint
             "?$format=json&" + oDataFilter, //Filter
 
@@ -720,8 +721,8 @@ function getSalesInfo(intent, session, callback) {
 
                 } else {
                     var totalSales = 0;
-                    for (var i = 0; i < response.length; i++ ){
-                        totalSales += Math.round(response[i].NetAmount,2);
+                    for (var i = 0; i < response.length; i++) {
+                        totalSales += Math.round(response[i].NetAmount, 2);
                     }
                     speechOutput = "The sales for the " + stringQuarter(b1Quarter) + " quarter of " +
                         SalesYear + " are " + totalSales + " " +
@@ -771,14 +772,6 @@ function postPurchase(intent, session, callback) {
 
     var ItemName = extractValue('ItemName', intent, session)
     var Quantity = extractValue('Quantity', intent, session)
-    var ItemRecom = extractValue('ItemRecom', intent, session)
-
-    var ItemTopping = null;
-    //var ItemRecom = null;
-
-
-    var ItemRecomName = null;
-    var params = null;
 
 
     console.log("ItemName Extraido " + ItemName);
@@ -787,548 +780,567 @@ function postPurchase(intent, session, callback) {
 
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'ItemName', ItemName);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'Quantity', Quantity);
+    sessionAttributes = handleSessionAttributes(sessionAttributes, 'PreviousIntent', intent.name);
 
-
-
-    if (intent.name == "AMAZON.YesIntent") {
-        ItemRecom = extractValue('ItemRecom', intent, session)
-    } else if (intent.name == "AMAZON.NoIntent") {
-        ItemRecom = "";
-    } else {
-        sessionAttributes = handleSessionAttributes(sessionAttributes, 'PreviousIntent', intent.name);
-    }
 
 
     if (ItemName == null) {
-        speechOutput = "Should I get you printer ink, paper or maybe an USB drive.";
-        repromptText = "You can say. I need printer ink. Or Buy me an USB drive";
+        speechOutput = "Should I get you a compressor, a gas boiler or maybe a stove?.";
+        repromptText = "You can say. I need a gas boiler. Or Buy me a stove";
     } else if (Quantity == null) {
-        speechOutput = "Ok, how many packs do you need?";
+        speechOutput = "Ok, how many do you need?";
         repromptText = "Tell me the quantity you need.";
-    } else if (ItemRecom == null && intent.name != "AMAZON.NoIntent") {
-
-        params = "?action=SalesRelated&item=" + ItemName;
-        params = params.replace(/ /g, "%20"); // Avoid unescaped characters
-
-        restCall(
-            "/b1Call.xsjs", // Endpoint
-            params, // Filter
-            function (response) {
-                console.log("RECOMENDADO - " + response);
-
-                if (response.resultSet.length == 0) {
-                    // If no recommendation is found. Then make a question for more items
-                    ItemRecom = "Do you need anything else?";
-                    speechOutput = "Do you need anything else?";
-                } else {
-                    var random = getRandomInt(0, response.resultSet.length - 1);;
-                    ItemRecom = response.resultSet[random].ItemCode
-                    ItemRecomName = response.resultSet[random].ItemName
-
-                    console.log("RETORNO - " + ItemRecom);
-
-                    sessionAttributes = handleSessionAttributes(sessionAttributes, 'ItemRecom', ItemRecom);
-
-                    speechOutput = getItemRelatedMessage(ItemRecomName, ItemName);
-                    repromptText = "I think you will love " + ItemRecomName + ". But I need your approval to buy it";
-
-                }
-                callback(sessionAttributes,
-                    buildSpeechletResponse(
-                        intent.name, speechOutput,
-                        repromptText, shouldEndSession
-                    )
-                );
-            }
-        );
-        return;
     } else {
 
-        params = '?action=SalesOrder' +
-            '&item=' + ItemName +
-            '&qty=' + Quantity;
+        /* ByD Requires a CSRF Token in every POST Request.
+        This token is provided by a GET with Authentication */
+        getCall("/", "", function (body, response) { //Callback Function
 
-        if (ItemRecom) {
-            params += '&item2=' + ItemRecom;
-        }
+            console.log("response is " + response);
+            if (response.statusCode != 200) {
+                speechOutput = "I am sorry, but there was an error processing this request";
+            } else {
 
-        params = params.replace(/ /g, "%20"); // Avoid unescaped characters
-        console.log('XSJS Params= ' + params);
+                var http = require('request');
 
-        restCall(
-            "/b1Call.xsjs", // Endpoint
-            params, //Parameters
-
-            function (response) {
-                console.log("response is " + response);
-
-
-                if (response.StatusCode != '201') {
-                    speechOutput = "I am sorry, but there was an error creating your order.";
-
-                } else {
-                    speechOutput = "Your order number " + response.DocNum + " was placed successfully! " +
-                        "The total amount of your purchase is " + response.DocTotal +
-                        " " + response.DocCurrency;
+                var body = {
+                    "ExternalReference": "From Alexa",
+                    "DataOriginTypeCode": "1",
+                    "Name": "Order created via Alexa on " + getDateTime(true),
+                    "SalesOrderBuyerParty": {
+                        "PartyID": process.env.SMB_DEFAULT_BP
+                    },
+                    "SalesOrderItem": [
+                        {
+                            "ID": "10",
+                            "SalesOrderItemProduct": {
+                                "ProductID": getByDProduct(ItemName)
+                            },
+                            "SalesOrderItemScheduleLine": [
+                                {
+                                    "Quantity": Quantity
+                                }
+                            ]
+                        }
+                    ]
                 }
 
-                shouldEndSession = true;
+                var options = {
+                    uri: g_hdbServer + g_hdbPort + g_hdbService + "/SalesOrderCollection",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "x-csrf-token": response.headers["x-csrf-token"], //Damm Token
+                        "cookie": response.headers["set-cookie"]
+                    },
+                    body: JSON.stringify(body)
+                };
 
-                // call back with result
-                callback(sessionAttributes,
-                    buildSpeechletResponse(
-                        intent.name, speechOutput,
-                        repromptText, shouldEndSession
-                    )
-                );
+                console.log('start request to ' + options.uri)
+
+                http.post(options, function (error, res, body) {
+                    console.log("Response: " + res.statusCode);
+                    if (!error && res.statusCode == 201) {
+                        speechOutput = "Your order number " + response.DocNum + " was placed successfully! " +
+                            "The total amount of your purchase is " + response.DocTotal +
+                            " " + response.DocCurrency;
+
+                        shouldEndSession = true;
+
+                        // call back with result
+                        callback(sessionAttributes,
+                            buildSpeechletResponse(
+                                intent.name, speechOutput,
+                                repromptText, shouldEndSession
+                            )
+                        )
+                        return;
+                    }
+                    else {
+                        speechOutput = "I am sorry, but there was an error creating your order.";
+                        callback(false)
+                    }
+                });
             }
+        })
+
+        console.log("Vao ser exportados " + JSON.stringify(sessionAttributes));
+
+        // Call back while there still questions to ask
+        callback(sessionAttributes,
+            buildSpeechletResponse(
+                intent.name, speechOutput,
+                repromptText, shouldEndSession
+            )
         );
-        return;
     }
-
-    console.log("Vao ser exportados " + JSON.stringify(sessionAttributes));
-
-    // Call back while there still questions to ask
-    callback(sessionAttributes,
-        buildSpeechletResponse(
-            intent.name, speechOutput,
-            repromptText, shouldEndSession
-        )
-    );
 }
 
 
-function restCall(endPoint, filter, response) {
+    function getCall(endPoint, filter, callback) {
 
-    var http = require('request');
-    var options = {
-        uri: g_hdbServer+g_hdbPort+g_hdbService + endPoint + filter,
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Basic " + process.env.SMB_AUTH,
+        var http = require('request');
+
+        var options = {
+            uri: g_hdbServer + g_hdbPort + g_hdbService + endPoint + filter,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Basic " + process.env.SMB_AUTH,
+                "x-csrf-token": "fetch"
+            }
+        };
+
+        console.log('start request to ' + options.uri)
+
+        http.get(options, function (error, res, body) {
+            console.log("Response: " + res.statusCode);
+            if (!error && res.statusCode == 200 || res.statusCode == 201) {
+                var parsed = JSON.parse(body);
+                callback(parsed, res);
+            }
+            else {
+                console.log("Error message: " + error);
+                callback(false)
+
+            }
+        });
+    }
+    // --------------- Handle of Session variables -----------------------
+
+
+    function extractValue(attr, intent, session) {
+
+        console.log("Extracting " + attr);
+
+        if (session.attributes) {
+            if (attr in session.attributes) {
+                console.log("Session attribute " + attr + " is " + session.attributes[attr]);
+                return session.attributes[attr];
+            }
         }
-    };
 
-    console.log('start request to ' + options.uri)
+        console.log("No session attribute for " + attr);
 
-    http.get(options, function (error, res, body) {
-        console.log("Response: " + res.statusCode);
-        if (!error && res.statusCode == 200) {
-            var parsed = JSON.parse(body);
-            response(parsed);
+        if (intent.slots) {
+            if (attr in intent.slots && 'value' in intent.slots[attr]) {
+                return intent.slots[attr].value;
+            }
+        };
+        return null;
+    }
+
+
+    function handleSessionAttributes(sessionAttributes, attr, value) {
+
+        //if Value exists as attribute than returns it
+
+        if (value) {
+            sessionAttributes[attr] = value;
         }
-        else {
-            console.log("Error message: " + error);
-            response(false)
+        return sessionAttributes;
+    }
 
+    // --------------- Auxiliar Functions Formatting -----------------------
+
+    function quotes(val) {
+        return "%27" + val + "%27";
+    }
+
+    function op(op) {
+        return "%20" + op + "%20";
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function formatQuarter(input) {
+
+        if (input == 'first' || input == '1st' || input == 'Q1') {
+            return '01';
         }
-    });
-}
 
-// --------------- Handle of Session variables -----------------------
+        if (input == 'second' || input == '2nd' || input == 'Q2') {
+            return '02';
+        }
 
+        if (input == 'third' || input == '3rd' || input == 'Q3') {
+            return '03';
+        }
 
-function extractValue(attr, intent, session) {
+        if (input == 'fourth' || input == '4th' || input == 'Q4') {
+            return '04';
+        }
 
-    console.log("Extracting " + attr);
+    }
 
-    if (session.attributes) {
-        if (attr in session.attributes) {
-            console.log("Session attribute " + attr + " is " + session.attributes[attr]);
-            return session.attributes[attr];
+    function stringQuarter(input) {
+
+        if (input == '01' || input == 'Q1') {
+            return 'first';
+        }
+
+        if (input == '02' || input == 'Q2') {
+            return 'second';
+        }
+
+        if (input == '03' || input == 'Q3') {
+            return 'third';
+        }
+
+        if (input == '04' || input == 'Q4') {
+            return 'fourth';
+        }
+
+    }
+
+    function beginQuarter(quarter, year) {
+
+        var ret = 'datetimeoffset'
+
+        if (quarter == '01' || quarter == 'Q1') {
+            ret += quotes(year + "-01-01T00:00:01Z")
+            return ret
+        }
+
+        if (quarter == '02' || quarter == 'Q2') {
+            ret += quotes(year + "-04-01T00:00:01Z")
+            return ret
+        }
+
+        if (quarter == '03' || quarter == 'Q3') {
+            ret += quotes(year + "-07-01T00:00:01Z")
+            return ret
+        }
+
+        if (quarter == '04' || quarter == 'Q4') {
+            ret += quotes(year + "-10-01T00:00:01Z")
+            return ret
         }
     }
 
-    console.log("No session attribute for " + attr);
+    function endQuarter(quarter, year) {
 
-    if (intent.slots) {
-        if (attr in intent.slots && 'value' in intent.slots[attr]) {
-            return intent.slots[attr].value;
+        var ret = 'datetimeoffset'
+
+        if (quarter == '01' || quarter == 'Q1') {
+            ret += quotes(year + "-03-31T23:59:59Z")
+            return ret
         }
-    };
-    return null;
-}
 
-function handleSessionAttributes(sessionAttributes, attr, value) {
+        if (quarter == '02' || quarter == 'Q2') {
+            ret += quotes(year + "-06-30T23:59:59Z")
+            return ret
+        }
 
-    //if Value exists as attribute than returns it
+        if (quarter == '03' || quarter == 'Q3') {
+            ret += quotes(year + "-09-30T23:59:59Z")
+            return ret
+        }
 
-    if (value) {
-        sessionAttributes[attr] = value;
-    }
-    return sessionAttributes;
-}
-
-// --------------- Auxiliar Functions Formatting -----------------------
-
-function quotes(val) {
-    return "%27" + val + "%27";
-}
-
-function op(op) {
-    return "%20" + op + "%20";
-}
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function formatQuarter(input) {
-
-    if (input == 'first' || input == '1st' || input == 'Q1') {
-        return '01';
+        if (quarter == '04' || quarter == 'Q4') {
+            ret += quotes(year + "-12-31T23:59:59Z")
+            return ret
+        }
     }
 
-    if (input == 'second' || input == '2nd' || input == 'Q2') {
-        return '02';
+    /***
+     * Input month: 0-11
+     * Output: '01', '02', '03', '04'...
+     ***/
+    function formatMonth(month) {
+        month = parseInt(month, 0) + 1;
+        return month < 10 ? "0" + month : month.toString();
     }
 
-    if (input == 'third' || input == '3rd' || input == 'Q3') {
-        return '03';
+    function getLastQuarter(d) {
+        d = d || new Date();
+        var m = d.getMonth();
+        var y = d.getFullYear();
+        if (m < 3) {
+            m = m + 9;
+            y = y - 1;
+        } else {
+            m = m - 3;
+        }
+        d.setMonth(m);
+        d.setFullYear(y);
+        var result = {};
+        result.Quarter = getCalendarQuarterStr(d);
+        result.Year = y;
+        return result;
     }
 
-    if (input == 'fourth' || input == '4th' || input == 'Q4') {
-        return '04';
+    /***
+     * To be improved: should get the financial period code from B1.
+     * not all country work on the calendar fiscal financial year.
+     * 
+     * Input month: 0-11
+     * Output: '01', '02', '03', '04'...
+     ***/
+    function formatB1PeriodCode(year, month) {
+        month = formatMonth(month);
+        return year + "-" + month;
     }
 
-}
-
-function stringQuarter(input) {
-
-    if (input == '01' || input == 'Q1') {
-        return 'first';
+    function formatB1PeriodCode2(d) {
+        d = d || new Date();
+        return formatB1PeriodCode(d.getFullYear(), d.getMonth());
     }
 
-    if (input == '02' || input == 'Q2') {
-        return 'second';
+    /***
+     * Get the current financial period code base on full year and month.
+     * 
+     * Input month: 2017-03-30
+     * Output: '2017-03', '2017-02'...
+     ***/
+    function getCurrentB1PeriodCode() {
+        var today = new Date();
+        return formatB1PeriodCode2(today);
     }
 
-    if (input == '03' || input == 'Q3') {
-        return 'third';
+    /***
+     * Get the financial period information for the a given date..
+     * 
+     * Input date: 2017-03-30
+     * Output: integer, 20170330
+     ***/
+    function formatB1DateInt(d) {
+        d = d || new Date();
+        var dateStr = d.getFullYear().toString() + formatMonth(d.getUTCMonth()) + d.getUTCDate().toString();
+        return parseInt(dateStr, 0);
     }
 
-    if (input == '04' || input == 'Q4') {
-        return 'fourth';
+    function ThisYear() {
+        return (new Date()).getFullYear();;
     }
 
-}
+    /***
+     * Get the financial period information for the a given date..
+     * 
+     * Input month: 2017-03-30
+     * Output: '2017-03', '2017-02'...
+     ***/
+    function initB1PeriodByDate(d) {
+        d = d || new Date(); //if no input date, use today
+        var dateInt = formatB1DateInt(d);
+        var period = {};
+        period.FinancialPeriodCode = getCurrentB1PeriodCode();
+        period.FiscalYear = ThisYear();
+        g_currFinPeriod = {};
+        g_currFinPeriod.FinancialPeriodCode = getCurrentB1PeriodCode();
+        g_currFinPeriod.FiscalYear = ThisYear();
 
-function beginQuarter(quarter, year) {
+        try {
+            getCall(
+                "/BusinessInfo.xsodata/FinancialPeriod", // Endpoint
+                "?$format=json&$select=FinancialPeriodCode,FiscalYear&$filter=PeriodStart%20le%20" + dateInt + "%20and%" + dateInt + "%20le%20PeriodEnd", //Filter
+                function (response) {
+                    console.log("response is " + response);
+                    response = response.d.results;
 
-    var ret = 'datetimeoffset'
-
-    if (quarter == '01' || quarter == 'Q1') {
-        ret += quotes(year + "-01-01T00:00:01Z")
-        return ret
-    }
-
-    if (quarter == '02' || quarter == 'Q2') {
-        ret += quotes(year + "-04-01T00:00:01Z")
-        return ret
-    }
-
-    if (quarter == '03' || quarter == 'Q3') {
-        ret += quotes(year + "-07-01T00:00:01Z")
-        return ret
-    }
-
-    if (quarter == '04' || quarter == 'Q4') {
-        ret += quotes(year + "-10-01T00:00:01Z")
-        return ret
-    }
-}
-
-function endQuarter(quarter, year) {
-
-    var ret = 'datetimeoffset'
-
-    if (quarter == '01' || quarter == 'Q1') {
-        ret += quotes(year + "-03-31T23:59:59Z")
-        return ret
-    }
-
-    if (quarter == '02' || quarter == 'Q2') {
-        ret += quotes(year + "-06-30T23:59:59Z")
-        return ret
-    }
-
-    if (quarter == '03' || quarter == 'Q3') {
-        ret += quotes(year + "-09-30T23:59:59Z")
-        return ret
-    }
-
-    if (quarter == '04' || quarter == 'Q4') {
-        ret += quotes(year + "-12-31T23:59:59Z")
-        return ret
-    }
-}
-
-/***
- * Input month: 0-11
- * Output: '01', '02', '03', '04'...
- ***/
-function formatMonth(month) {
-    month = parseInt(month, 0) + 1;
-    return month < 10 ? "0" + month : month.toString();
-}
-
-function getLastQuarter(d) {
-    d = d || new Date();
-    var m = d.getMonth();
-    var y = d.getFullYear();
-    if (m < 3) {
-        m = m + 9;
-        y = y - 1;
-    } else {
-        m = m - 3;
-    }
-    d.setMonth(m);
-    d.setFullYear(y);
-    var result = {};
-    result.Quarter = getCalendarQuarterStr(d);
-    result.Year = y;
-    return result;
-}
-
-/***
- * To be improved: should get the financial period code from B1.
- * not all country work on the calendar fiscal financial year.
- * 
- * Input month: 0-11
- * Output: '01', '02', '03', '04'...
- ***/
-function formatB1PeriodCode(year, month) {
-    month = formatMonth(month);
-    return year + "-" + month;
-}
-
-function formatB1PeriodCode2(d) {
-    d = d || new Date();
-    return formatB1PeriodCode(d.getFullYear(), d.getMonth());
-}
-
-/***
- * Get the current financial period code base on full year and month.
- * 
- * Input month: 2017-03-30
- * Output: '2017-03', '2017-02'...
- ***/
-function getCurrentB1PeriodCode() {
-    var today = new Date();
-    return formatB1PeriodCode2(today);
-}
-
-/***
- * Get the financial period information for the a given date..
- * 
- * Input date: 2017-03-30
- * Output: integer, 20170330
- ***/
-function formatB1DateInt(d) {
-    d = d || new Date();
-    var dateStr = d.getFullYear().toString() + formatMonth(d.getUTCMonth()) + d.getUTCDate().toString();
-    return parseInt(dateStr, 0);
-}
-
-function ThisYear() {
-    return (new Date()).getFullYear();;
-}
-
-/***
- * Get the financial period information for the a given date..
- * 
- * Input month: 2017-03-30
- * Output: '2017-03', '2017-02'...
- ***/
-function initB1PeriodByDate(d) {
-    d = d || new Date(); //if no input date, use today
-    var dateInt = formatB1DateInt(d);
-    var period = {};
-    period.FinancialPeriodCode = getCurrentB1PeriodCode();
-    period.FiscalYear = ThisYear();
-    g_currFinPeriod = {};
-    g_currFinPeriod.FinancialPeriodCode = getCurrentB1PeriodCode();
-    g_currFinPeriod.FiscalYear = ThisYear();
-
-    try {
-        restCall(
-            "/BusinessInfo.xsodata/FinancialPeriod", // Endpoint
-            "?$format=json&$select=FinancialPeriodCode,FiscalYear&$filter=PeriodStart%20le%20" + dateInt + "%20and%" + dateInt + "%20le%20PeriodEnd", //Filter
-            function (response) {
-                console.log("response is " + response);
-                response = response.d.results;
-
-                if (response.length > 0) {
-                    period = response[0];
-                    g_currFinPeriod = period;
+                    if (response.length > 0) {
+                        period = response[0];
+                        g_currFinPeriod = period;
+                    }
                 }
-            }
-        );
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-/***
- * Get the current financial period code base on full year and month.
- * 
- * Input month: 2017-03-30
- * Output: '2017-03', '2017-02'...
- ***/
-function getCalendarQuarter(d) {
-    d = d || new Date();
-    var m = Math.floor(d.getMonth() / 3) + 1;
-    return m;
-}
-
-function getCalendarQuarterStr(d) {
-    d = d || new Date();
-    var q = "0" + (Math.floor(d.getMonth() / 3) + 1).toString();
-    return q;
-}
-
-//WeakPositiveSentiment','StrongPositiveSentiment','NeutralSentiment', '
-//WeakNegativeSentiment','StrongNegativeSentiment','MajorProblem','MinorProblem'
-function formatSentiment(input) {
-
-    input = input.toUpperCase();
-    switch (input) {
-        case 'WEAK POSITIVE':
-            return 'WeakPositiveSentiment';
-
-        case 'STRONG POSITIVE':
-            return 'StrongPositiveSentiment';
-
-        case 'POSITIVE':
-            return 'StrongPositiveSentiment';
-
-        case 'NEUTRAL':
-            return 'NeutralSentiment';
-
-        case 'NEGATIVE':
-            return 'StrongNegativeSentiment';
-
-        case 'WEAK NEGATIVE':
-            return 'WeakNegativeSentiment';
-
-        case 'STRONG NEGATIVE':
-            return 'StrongNegativeSentiment';
-
-        case 'MAJOR PROBLEM':
-            return 'MajorProblem';
-
-        case 'MINOR PROBLEM':
-            return 'MinorProblem';
-
-        default:
-            return 'StrongPositiveSentiment';
-    }
-}
-
-function formatItemGrp(itemGrp) {
-    //Assures the item group name is formatted correctly
-
-    itemGrp = itemGrp.toLowerCase();
-
-    if (itemGrp == 'pc') {
-        return 'PC';
-    }
-    return toTitleCase(itemGrp)
-}
-
-function toTitleCase(str) {
-    //Capitlize the first letter of each word on a given string
-    return str.replace(/\w\S*/g, function (txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
-
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-}
-
-function formatPerc(value) {
-    return round(value * 100, 1) + "%";
-}
-
-function calcPerc(value1, value2) {
-    if (typeof (value2) !== 'undefined' &&
-        value2 !== 0 &&
-        typeof (value1) !== 'undefined') {
-        return round(value1 * 100 / value2, 1) + "%";
+            );
+        } catch (e) {
+            console.log(e);
+        }
     }
 
-    return "0%";
-}
+    /***
+     * Get the current financial period code base on full year and month.
+     * 
+     * Input month: 2017-03-30
+     * Output: '2017-03', '2017-02'...
+     ***/
+    function getCalendarQuarter(d) {
+        d = d || new Date();
+        var m = Math.floor(d.getMonth() / 3) + 1;
+        return m;
+    }
+
+    function getCalendarQuarterStr(d) {
+        d = d || new Date();
+        var q = "0" + (Math.floor(d.getMonth() / 3) + 1).toString();
+        return q;
+    }
+
+    //WeakPositiveSentiment','StrongPositiveSentiment','NeutralSentiment', '
+    //WeakNegativeSentiment','StrongNegativeSentiment','MajorProblem','MinorProblem'
+    function formatSentiment(input) {
+
+        input = input.toUpperCase();
+        switch (input) {
+            case 'WEAK POSITIVE':
+                return 'WeakPositiveSentiment';
+
+            case 'STRONG POSITIVE':
+                return 'StrongPositiveSentiment';
+
+            case 'POSITIVE':
+                return 'StrongPositiveSentiment';
+
+            case 'NEUTRAL':
+                return 'NeutralSentiment';
+
+            case 'NEGATIVE':
+                return 'StrongNegativeSentiment';
+
+            case 'WEAK NEGATIVE':
+                return 'WeakNegativeSentiment';
+
+            case 'STRONG NEGATIVE':
+                return 'StrongNegativeSentiment';
+
+            case 'MAJOR PROBLEM':
+                return 'MajorProblem';
+
+            case 'MINOR PROBLEM':
+                return 'MinorProblem';
+
+            default:
+                return 'StrongPositiveSentiment';
+        }
+    }
+
+    function formatItemGrp(itemGrp) {
+        //Assures the item group name is formatted correctly
+
+        itemGrp = itemGrp.toLowerCase();
+
+        if (itemGrp == 'pc') {
+            return 'PC';
+        }
+        return toTitleCase(itemGrp)
+    }
+
+    function toTitleCase(str) {
+        //Capitlize the first letter of each word on a given string
+        return str.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+
+    function round(value, precision) {
+        var multiplier = Math.pow(10, precision || 0);
+        return Math.round(value * multiplier) / multiplier;
+    }
+
+    function formatPerc(value) {
+        return round(value * 100, 1) + "%";
+    }
+
+    function calcPerc(value1, value2) {
+        if (typeof (value2) !== 'undefined' &&
+            value2 !== 0 &&
+            typeof (value1) !== 'undefined') {
+            return round(value1 * 100 / value2, 1) + "%";
+        }
+
+        return "0%";
+    }
+
+    function getDateTime(withHour) {
+        var currentdate = new Date();
+        var datetime = currentdate.getFullYear() + "-"
+            + (currentdate.getMonth() + 1) + "-"
+            + currentdate.getDate();
+
+        if (withHour) {
+            datetime += " @ "
+                + currentdate.getHours() + ":"
+                + currentdate.getMinutes() + ":"
+                + currentdate.getSeconds();
+        }
+
+        return datetime;
+    }
+
+    function getByDProduct(item) {
+        item = formatItemGrp(item);
+
+        if (item == "Boiler")
+            return "S1001000";
+
+        if (item == "Stove")
+            return "P110401";
+
+        if (item == "Compressor")
+            return "P120101";
+        return "";
+
+    }
 
 
-// -------------------- Speech Functions Formatting -----------------------
-function getWelcomeMessage() {
-    var message = [];
+    // -------------------- Speech Functions Formatting -----------------------
+    function getWelcomeMessage() {
+        var message = [];
 
-    message[0] = "Welcome to B1 Assistant. How can I help?"
-    message[1] = "Hi, I am your B1 assistant. How can I help you today?"
-    message[2] = "This is B1 assistant speaking. What is my command?"
-    message[3] = "Hello, here is B1 assistant. Let me know what do you wish."
+        message[0] = "Welcome to B1 Assistant. How can I help?"
+        message[1] = "Hi, I am your B1 assistant. How can I help you today?"
+        message[2] = "This is B1 assistant speaking. What is my command?"
+        message[3] = "Hello, here is B1 assistant. Let me know what do you wish."
 
-    return message[getRandomInt(0, message.length - 1)];
-}
+        return message[getRandomInt(0, message.length - 1)];
+    }
 
-function getItemRecomendMessage(item) {
-    var message = [];
+    function getItemRecomendMessage(item) {
+        var message = [];
 
-    message[0] = "Perhaps you would like some %s. Did I get it right?"
-    message[1] = "So, what about %s?"
-    message[2] = "Maybe, you prefer %s. Am I right this time?"
-    message[3] = "May I offer you %s? What do you think?"
-
-
-    return message[getRandomInt(0, message.length - 1)].replace(/%s/g, item);
-}
-
-function getItemRelatedMessage(item, item2) {
-    var message = [];
-
-    message[0] = "Can I get you also %s? It goes great with %s2.";
-    message[1] = "Would you like to add %s to your order? It's a great match with %s2."
-    message[2] = "May I add %s to this purchase? Fits good with %s2."
-
-    return message[getRandomInt(0, message.length - 1)].replace(/%s2/g, item2).replace(/%s/g, item);
-}
-
-// --------------- Helpers that build all of the responses -----------------------
+        message[0] = "Perhaps you would like some %s. Did I get it right?"
+        message[1] = "So, what about %s?"
+        message[2] = "Maybe, you prefer %s. Am I right this time?"
+        message[3] = "May I offer you %s? What do you think?"
 
 
-function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
-    return {
-        outputSpeech: {
-            type: "PlainText",
-            text: output
-        },
-        card: {
-            type: "Standard",
-            title: title,
-            text: output,
-            image: {
-                smallImageUrl: "https://i.imgur.com/1sgV9Er.png"
-            }
-        },
-        reprompt: {
+        return message[getRandomInt(0, message.length - 1)].replace(/%s/g, item);
+    }
+
+    function getItemRelatedMessage(item, item2) {
+        var message = [];
+
+        message[0] = "Can I get you also %s? It goes great with %s2.";
+        message[1] = "Would you like to add %s to your order? It's a great match with %s2."
+        message[2] = "May I add %s to this purchase? Fits good with %s2."
+
+        return message[getRandomInt(0, message.length - 1)].replace(/%s2/g, item2).replace(/%s/g, item);
+    }
+
+    // --------------- Helpers that build all of the responses -----------------------
+
+
+    function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+        return {
             outputSpeech: {
                 type: "PlainText",
-                text: repromptText
-            }
-        },
-        shouldEndSession: shouldEndSession
-    };
-}
+                text: output
+            },
+            card: {
+                type: "Standard",
+                title: title,
+                text: output,
+                image: {
+                    smallImageUrl: "https://i.imgur.com/ZJFFyRa.png"
+                }
+            },
+            reprompt: {
+                outputSpeech: {
+                    type: "PlainText",
+                    text: repromptText
+                }
+            },
+            shouldEndSession: shouldEndSession
+        };
+    }
 
-function buildResponse(sessionAttributes, speechletResponse) {
-    return {
-        version: "1.0",
-        sessionAttributes: sessionAttributes,
-        response: speechletResponse
-    };
-}
+    function buildResponse(sessionAttributes, speechletResponse) {
+        return {
+            version: "1.0",
+            sessionAttributes: sessionAttributes,
+            response: speechletResponse
+        };
+    }
