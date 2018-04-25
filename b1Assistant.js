@@ -353,8 +353,6 @@ function postPurchase(intent, session, callback) {
         })
         return
     }
-    console.log("Vao ser exportados " + JSON.stringify(sessionAttributes));
-
     // Call back while there still questions to ask
     callback(sessionAttributes,
         buildSpeechletResponse(
@@ -586,10 +584,10 @@ function getByDProduct(item) {
 function getWelcomeMessage() {
     var message = [];
 
-    message[0] = "Welcome to BYD. Assistant. How can I help?"
+    message[0] = "Welcome to BYD Assistant. How can I help?"
     message[1] = "Hi, I am your BYD assistant. How can I help you today?"
     message[2] = "This is BYD assistant speaking. What is my command?"
-    message[3] = "Hello, here is BYD assistant. Let me know what do you wish."
+    message[3] = "Hello! Here is BYD assistant. Let me know what do you wish."
 
     return message[getRandomInt(0, message.length - 1)];
 }
@@ -622,6 +620,7 @@ function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
 }
 
 function buildResponse(sessionAttributes, speechletResponse) {
+    console.log("ALEXA: "+speechletResponse);
     return {
         version: "1.0",
         sessionAttributes: sessionAttributes,
