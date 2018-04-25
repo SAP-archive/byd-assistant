@@ -596,6 +596,7 @@ function getWelcomeMessage() {
 
 
 function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+    console.log("ALEXA: "+output);
     return {
         outputSpeech: {
             type: "PlainText",
@@ -620,7 +621,6 @@ function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
 }
 
 function buildResponse(sessionAttributes, speechletResponse) {
-    console.log("ALEXA: "+speechletResponse);
     return {
         version: "1.0",
         sessionAttributes: sessionAttributes,
