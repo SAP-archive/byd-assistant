@@ -326,11 +326,11 @@ function postPurchase(intent, session, callback) {
                 http.post(options, function (error, res, body) {
                     console.log("Response: " + res.statusCode);
                     if (!error && res.statusCode == 201) {
-                        
+
                         body = JSON.parse(body);
                         body = body.d.results;
-                        console.log("Order "+ body.ID+" created!")
-                        
+                        console.log("Order " + body.ID + " created!")
+
                         speechOutput = "Your order number " + body.ID + " was placed successfully! " +
                             "The total amount of your purchase is " + body.NetAmount +
                             " " + body.currencyCode;
@@ -345,12 +345,10 @@ function postPurchase(intent, session, callback) {
                     callback(sessionAttributes,
                         buildSpeechletResponse(
                             intent.name, speechOutput,
-                            repromptText, shouldEndSession
-                        )
-                    )
-                    ;
+                            repromptText, shouldEndSession)
+                    );
                 });
-                
+
             }
         })
         return
@@ -422,7 +420,7 @@ function extractValue(attr, intent, session) {
 function handleSessionAttributes(sessionAttributes, attr, value) {
 
     //if Value exists as attribute than returns it
-    console.log("Previous "+attr+"is: "+value)
+    console.log("Previous " + attr + "is: " + value)
     if (value) {
         sessionAttributes[attr] = value;
     }
@@ -572,7 +570,7 @@ function getByDProduct(item) {
     item = formatItemGrp(item);
 
     if (item == "Boiler")
-        return "S1001000";
+        return "P100401";
 
     if (item == "Stove")
         return "P110401";
