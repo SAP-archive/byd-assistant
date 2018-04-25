@@ -841,506 +841,510 @@ function postPurchase(intent, session, callback) {
                 http.post(options, function (error, res, body) {
                     console.log("Response: " + res.statusCode);
                     if (!error && res.statusCode == 201) {
-                        speechOutput = "Your order number " + response.DocNum + " was placed successfully! " +
-                            "The total amount of your purchase is " + response.DocTotal +
-                            " " + response.DocCurrency;
+                        
+                        body = JSON.parse(body);
+                        body = body.d.results;
+                        console.log("Order "+ body.ID+" created!")
+                        
+                        speechOutput = "Your order number " + body.ID + " was placed successfully! " +
+                            "The total amount of your purchase is " + body.NetAmount +
+                            " " + body.currencyCode;
 
                         shouldEndSession = true;
-
-                        // call back with result
-                        callback(sessionAttributes,
-                            buildSpeechletResponse(
-                                intent.name, speechOutput,
-                                repromptText, shouldEndSession
-                            )
-                        )
-                        return;
                     }
                     else {
                         speechOutput = "I am sorry, but there was an error creating your order.";
-                        callback(false)
                     }
+
+                    // call back with result
+                    callback(sessionAttributes,
+                        buildSpeechletResponse(
+                            intent.name, speechOutput,
+                            repromptText, shouldEndSession
+                        )
+                    )
+                    ;
                 });
+                
             }
         })
-
-        console.log("Vao ser exportados " + JSON.stringify(sessionAttributes));
-
-        // Call back while there still questions to ask
-        callback(sessionAttributes,
-            buildSpeechletResponse(
-                intent.name, speechOutput,
-                repromptText, shouldEndSession
-            )
-        );
+        return
     }
+    console.log("Vao ser exportados " + JSON.stringify(sessionAttributes));
+
+    // Call back while there still questions to ask
+    callback(sessionAttributes,
+        buildSpeechletResponse(
+            intent.name, speechOutput,
+            repromptText, shouldEndSession
+        )
+    );
+}
+
+function getCall(endPoint, filter, callback) {
+
+    var http = require('request');
+
+    var options = {
+        uri: g_hdbServer + g_hdbPort + g_hdbService + endPoint + filter,
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Basic " + process.env.SMB_AUTH,
+            "x-csrf-token": "fetch"
+        }
+    };
+
+    console.log('start request to ' + options.uri)
+
+    http.get(options, function (error, res, body) {
+        console.log("Response: " + res.statusCode);
+        if (!error && res.statusCode == 200 || res.statusCode == 201) {
+            var parsed = JSON.parse(body);
+            callback(parsed, res);
+        }
+        else {
+            console.log("Error message: " + error);
+            callback(false)
+
+        }
+    });
+}
+// --------------- Handle of Session variables -----------------------
+
+
+function extractValue(attr, intent, session) {
+
+    console.log("Extracting " + attr);
+
+    if (session.attributes) {
+        if (attr in session.attributes) {
+            console.log("Session attribute " + attr + " is " + session.attributes[attr]);
+            return session.attributes[attr];
+        }
+    }
+
+    console.log("No session attribute for " + attr);
+
+    if (intent.slots) {
+        if (attr in intent.slots && 'value' in intent.slots[attr]) {
+            return intent.slots[attr].value;
+        }
+    };
+    return null;
 }
 
 
-    function getCall(endPoint, filter, callback) {
+function handleSessionAttributes(sessionAttributes, attr, value) {
 
-        var http = require('request');
+    //if Value exists as attribute than returns it
 
-        var options = {
-            uri: g_hdbServer + g_hdbPort + g_hdbService + endPoint + filter,
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": "Basic " + process.env.SMB_AUTH,
-                "x-csrf-token": "fetch"
-            }
-        };
-
-        console.log('start request to ' + options.uri)
-
-        http.get(options, function (error, res, body) {
-            console.log("Response: " + res.statusCode);
-            if (!error && res.statusCode == 200 || res.statusCode == 201) {
-                var parsed = JSON.parse(body);
-                callback(parsed, res);
-            }
-            else {
-                console.log("Error message: " + error);
-                callback(false)
-
-            }
-        });
+    if (value) {
+        sessionAttributes[attr] = value;
     }
-    // --------------- Handle of Session variables -----------------------
+    return sessionAttributes;
+}
 
+// --------------- Auxiliar Functions Formatting -----------------------
 
-    function extractValue(attr, intent, session) {
+function quotes(val) {
+    return "%27" + val + "%27";
+}
 
-        console.log("Extracting " + attr);
+function op(op) {
+    return "%20" + op + "%20";
+}
 
-        if (session.attributes) {
-            if (attr in session.attributes) {
-                console.log("Session attribute " + attr + " is " + session.attributes[attr]);
-                return session.attributes[attr];
-            }
-        }
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-        console.log("No session attribute for " + attr);
+function formatQuarter(input) {
 
-        if (intent.slots) {
-            if (attr in intent.slots && 'value' in intent.slots[attr]) {
-                return intent.slots[attr].value;
-            }
-        };
-        return null;
+    if (input == 'first' || input == '1st' || input == 'Q1') {
+        return '01';
     }
 
-
-    function handleSessionAttributes(sessionAttributes, attr, value) {
-
-        //if Value exists as attribute than returns it
-
-        if (value) {
-            sessionAttributes[attr] = value;
-        }
-        return sessionAttributes;
+    if (input == 'second' || input == '2nd' || input == 'Q2') {
+        return '02';
     }
 
-    // --------------- Auxiliar Functions Formatting -----------------------
-
-    function quotes(val) {
-        return "%27" + val + "%27";
+    if (input == 'third' || input == '3rd' || input == 'Q3') {
+        return '03';
     }
 
-    function op(op) {
-        return "%20" + op + "%20";
+    if (input == 'fourth' || input == '4th' || input == 'Q4') {
+        return '04';
     }
 
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function stringQuarter(input) {
+
+    if (input == '01' || input == 'Q1') {
+        return 'first';
     }
 
-    function formatQuarter(input) {
-
-        if (input == 'first' || input == '1st' || input == 'Q1') {
-            return '01';
-        }
-
-        if (input == 'second' || input == '2nd' || input == 'Q2') {
-            return '02';
-        }
-
-        if (input == 'third' || input == '3rd' || input == 'Q3') {
-            return '03';
-        }
-
-        if (input == 'fourth' || input == '4th' || input == 'Q4') {
-            return '04';
-        }
-
+    if (input == '02' || input == 'Q2') {
+        return 'second';
     }
 
-    function stringQuarter(input) {
-
-        if (input == '01' || input == 'Q1') {
-            return 'first';
-        }
-
-        if (input == '02' || input == 'Q2') {
-            return 'second';
-        }
-
-        if (input == '03' || input == 'Q3') {
-            return 'third';
-        }
-
-        if (input == '04' || input == 'Q4') {
-            return 'fourth';
-        }
-
+    if (input == '03' || input == 'Q3') {
+        return 'third';
     }
 
-    function beginQuarter(quarter, year) {
-
-        var ret = 'datetimeoffset'
-
-        if (quarter == '01' || quarter == 'Q1') {
-            ret += quotes(year + "-01-01T00:00:01Z")
-            return ret
-        }
-
-        if (quarter == '02' || quarter == 'Q2') {
-            ret += quotes(year + "-04-01T00:00:01Z")
-            return ret
-        }
-
-        if (quarter == '03' || quarter == 'Q3') {
-            ret += quotes(year + "-07-01T00:00:01Z")
-            return ret
-        }
-
-        if (quarter == '04' || quarter == 'Q4') {
-            ret += quotes(year + "-10-01T00:00:01Z")
-            return ret
-        }
+    if (input == '04' || input == 'Q4') {
+        return 'fourth';
     }
 
-    function endQuarter(quarter, year) {
+}
 
-        var ret = 'datetimeoffset'
+function beginQuarter(quarter, year) {
 
-        if (quarter == '01' || quarter == 'Q1') {
-            ret += quotes(year + "-03-31T23:59:59Z")
-            return ret
-        }
+    var ret = 'datetimeoffset'
 
-        if (quarter == '02' || quarter == 'Q2') {
-            ret += quotes(year + "-06-30T23:59:59Z")
-            return ret
-        }
-
-        if (quarter == '03' || quarter == 'Q3') {
-            ret += quotes(year + "-09-30T23:59:59Z")
-            return ret
-        }
-
-        if (quarter == '04' || quarter == 'Q4') {
-            ret += quotes(year + "-12-31T23:59:59Z")
-            return ret
-        }
+    if (quarter == '01' || quarter == 'Q1') {
+        ret += quotes(year + "-01-01T00:00:01Z")
+        return ret
     }
 
-    /***
-     * Input month: 0-11
-     * Output: '01', '02', '03', '04'...
-     ***/
-    function formatMonth(month) {
-        month = parseInt(month, 0) + 1;
-        return month < 10 ? "0" + month : month.toString();
+    if (quarter == '02' || quarter == 'Q2') {
+        ret += quotes(year + "-04-01T00:00:01Z")
+        return ret
     }
 
-    function getLastQuarter(d) {
-        d = d || new Date();
-        var m = d.getMonth();
-        var y = d.getFullYear();
-        if (m < 3) {
-            m = m + 9;
-            y = y - 1;
-        } else {
-            m = m - 3;
-        }
-        d.setMonth(m);
-        d.setFullYear(y);
-        var result = {};
-        result.Quarter = getCalendarQuarterStr(d);
-        result.Year = y;
-        return result;
+    if (quarter == '03' || quarter == 'Q3') {
+        ret += quotes(year + "-07-01T00:00:01Z")
+        return ret
     }
 
-    /***
-     * To be improved: should get the financial period code from B1.
-     * not all country work on the calendar fiscal financial year.
-     * 
-     * Input month: 0-11
-     * Output: '01', '02', '03', '04'...
-     ***/
-    function formatB1PeriodCode(year, month) {
-        month = formatMonth(month);
-        return year + "-" + month;
+    if (quarter == '04' || quarter == 'Q4') {
+        ret += quotes(year + "-10-01T00:00:01Z")
+        return ret
+    }
+}
+
+function endQuarter(quarter, year) {
+
+    var ret = 'datetimeoffset'
+
+    if (quarter == '01' || quarter == 'Q1') {
+        ret += quotes(year + "-03-31T23:59:59Z")
+        return ret
     }
 
-    function formatB1PeriodCode2(d) {
-        d = d || new Date();
-        return formatB1PeriodCode(d.getFullYear(), d.getMonth());
+    if (quarter == '02' || quarter == 'Q2') {
+        ret += quotes(year + "-06-30T23:59:59Z")
+        return ret
     }
 
-    /***
-     * Get the current financial period code base on full year and month.
-     * 
-     * Input month: 2017-03-30
-     * Output: '2017-03', '2017-02'...
-     ***/
-    function getCurrentB1PeriodCode() {
-        var today = new Date();
-        return formatB1PeriodCode2(today);
+    if (quarter == '03' || quarter == 'Q3') {
+        ret += quotes(year + "-09-30T23:59:59Z")
+        return ret
     }
 
-    /***
-     * Get the financial period information for the a given date..
-     * 
-     * Input date: 2017-03-30
-     * Output: integer, 20170330
-     ***/
-    function formatB1DateInt(d) {
-        d = d || new Date();
-        var dateStr = d.getFullYear().toString() + formatMonth(d.getUTCMonth()) + d.getUTCDate().toString();
-        return parseInt(dateStr, 0);
+    if (quarter == '04' || quarter == 'Q4') {
+        ret += quotes(year + "-12-31T23:59:59Z")
+        return ret
     }
+}
 
-    function ThisYear() {
-        return (new Date()).getFullYear();;
+/***
+ * Input month: 0-11
+ * Output: '01', '02', '03', '04'...
+ ***/
+function formatMonth(month) {
+    month = parseInt(month, 0) + 1;
+    return month < 10 ? "0" + month : month.toString();
+}
+
+function getLastQuarter(d) {
+    d = d || new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    if (m < 3) {
+        m = m + 9;
+        y = y - 1;
+    } else {
+        m = m - 3;
     }
+    d.setMonth(m);
+    d.setFullYear(y);
+    var result = {};
+    result.Quarter = getCalendarQuarterStr(d);
+    result.Year = y;
+    return result;
+}
 
-    /***
-     * Get the financial period information for the a given date..
-     * 
-     * Input month: 2017-03-30
-     * Output: '2017-03', '2017-02'...
-     ***/
-    function initB1PeriodByDate(d) {
-        d = d || new Date(); //if no input date, use today
-        var dateInt = formatB1DateInt(d);
-        var period = {};
-        period.FinancialPeriodCode = getCurrentB1PeriodCode();
-        period.FiscalYear = ThisYear();
-        g_currFinPeriod = {};
-        g_currFinPeriod.FinancialPeriodCode = getCurrentB1PeriodCode();
-        g_currFinPeriod.FiscalYear = ThisYear();
+/***
+ * To be improved: should get the financial period code from B1.
+ * not all country work on the calendar fiscal financial year.
+ * 
+ * Input month: 0-11
+ * Output: '01', '02', '03', '04'...
+ ***/
+function formatB1PeriodCode(year, month) {
+    month = formatMonth(month);
+    return year + "-" + month;
+}
 
-        try {
-            getCall(
-                "/BusinessInfo.xsodata/FinancialPeriod", // Endpoint
-                "?$format=json&$select=FinancialPeriodCode,FiscalYear&$filter=PeriodStart%20le%20" + dateInt + "%20and%" + dateInt + "%20le%20PeriodEnd", //Filter
-                function (response) {
-                    console.log("response is " + response);
-                    response = response.d.results;
+function formatB1PeriodCode2(d) {
+    d = d || new Date();
+    return formatB1PeriodCode(d.getFullYear(), d.getMonth());
+}
 
-                    if (response.length > 0) {
-                        period = response[0];
-                        g_currFinPeriod = period;
-                    }
+/***
+ * Get the current financial period code base on full year and month.
+ * 
+ * Input month: 2017-03-30
+ * Output: '2017-03', '2017-02'...
+ ***/
+function getCurrentB1PeriodCode() {
+    var today = new Date();
+    return formatB1PeriodCode2(today);
+}
+
+/***
+ * Get the financial period information for the a given date..
+ * 
+ * Input date: 2017-03-30
+ * Output: integer, 20170330
+ ***/
+function formatB1DateInt(d) {
+    d = d || new Date();
+    var dateStr = d.getFullYear().toString() + formatMonth(d.getUTCMonth()) + d.getUTCDate().toString();
+    return parseInt(dateStr, 0);
+}
+
+function ThisYear() {
+    return (new Date()).getFullYear();;
+}
+
+/***
+ * Get the financial period information for the a given date..
+ * 
+ * Input month: 2017-03-30
+ * Output: '2017-03', '2017-02'...
+ ***/
+function initB1PeriodByDate(d) {
+    d = d || new Date(); //if no input date, use today
+    var dateInt = formatB1DateInt(d);
+    var period = {};
+    period.FinancialPeriodCode = getCurrentB1PeriodCode();
+    period.FiscalYear = ThisYear();
+    g_currFinPeriod = {};
+    g_currFinPeriod.FinancialPeriodCode = getCurrentB1PeriodCode();
+    g_currFinPeriod.FiscalYear = ThisYear();
+
+    try {
+        getCall(
+            "/BusinessInfo.xsodata/FinancialPeriod", // Endpoint
+            "?$format=json&$select=FinancialPeriodCode,FiscalYear&$filter=PeriodStart%20le%20" + dateInt + "%20and%" + dateInt + "%20le%20PeriodEnd", //Filter
+            function (response) {
+                console.log("response is " + response);
+                response = response.d.results;
+
+                if (response.length > 0) {
+                    period = response[0];
+                    g_currFinPeriod = period;
                 }
-            );
-        } catch (e) {
-            console.log(e);
-        }
+            }
+        );
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/***
+ * Get the current financial period code base on full year and month.
+ * 
+ * Input month: 2017-03-30
+ * Output: '2017-03', '2017-02'...
+ ***/
+function getCalendarQuarter(d) {
+    d = d || new Date();
+    var m = Math.floor(d.getMonth() / 3) + 1;
+    return m;
+}
+
+function getCalendarQuarterStr(d) {
+    d = d || new Date();
+    var q = "0" + (Math.floor(d.getMonth() / 3) + 1).toString();
+    return q;
+}
+
+//WeakPositiveSentiment','StrongPositiveSentiment','NeutralSentiment', '
+//WeakNegativeSentiment','StrongNegativeSentiment','MajorProblem','MinorProblem'
+function formatSentiment(input) {
+
+    input = input.toUpperCase();
+    switch (input) {
+        case 'WEAK POSITIVE':
+            return 'WeakPositiveSentiment';
+
+        case 'STRONG POSITIVE':
+            return 'StrongPositiveSentiment';
+
+        case 'POSITIVE':
+            return 'StrongPositiveSentiment';
+
+        case 'NEUTRAL':
+            return 'NeutralSentiment';
+
+        case 'NEGATIVE':
+            return 'StrongNegativeSentiment';
+
+        case 'WEAK NEGATIVE':
+            return 'WeakNegativeSentiment';
+
+        case 'STRONG NEGATIVE':
+            return 'StrongNegativeSentiment';
+
+        case 'MAJOR PROBLEM':
+            return 'MajorProblem';
+
+        case 'MINOR PROBLEM':
+            return 'MinorProblem';
+
+        default:
+            return 'StrongPositiveSentiment';
+    }
+}
+
+function formatItemGrp(itemGrp) {
+    //Assures the item group name is formatted correctly
+
+    itemGrp = itemGrp.toLowerCase();
+
+    if (itemGrp == 'pc') {
+        return 'PC';
+    }
+    return toTitleCase(itemGrp)
+}
+
+function toTitleCase(str) {
+    //Capitlize the first letter of each word on a given string
+    return str.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+
+function formatPerc(value) {
+    return round(value * 100, 1) + "%";
+}
+
+function calcPerc(value1, value2) {
+    if (typeof (value2) !== 'undefined' &&
+        value2 !== 0 &&
+        typeof (value1) !== 'undefined') {
+        return round(value1 * 100 / value2, 1) + "%";
     }
 
-    /***
-     * Get the current financial period code base on full year and month.
-     * 
-     * Input month: 2017-03-30
-     * Output: '2017-03', '2017-02'...
-     ***/
-    function getCalendarQuarter(d) {
-        d = d || new Date();
-        var m = Math.floor(d.getMonth() / 3) + 1;
-        return m;
+    return "0%";
+}
+
+function getDateTime(withHour) {
+    var currentdate = new Date();
+    var datetime = currentdate.getFullYear() + "-"
+        + (currentdate.getMonth() + 1) + "-"
+        + currentdate.getDate();
+
+    if (withHour) {
+        datetime += " @ "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
+            + currentdate.getSeconds();
     }
 
-    function getCalendarQuarterStr(d) {
-        d = d || new Date();
-        var q = "0" + (Math.floor(d.getMonth() / 3) + 1).toString();
-        return q;
-    }
+    return datetime;
+}
 
-    //WeakPositiveSentiment','StrongPositiveSentiment','NeutralSentiment', '
-    //WeakNegativeSentiment','StrongNegativeSentiment','MajorProblem','MinorProblem'
-    function formatSentiment(input) {
+function getByDProduct(item) {
+    item = formatItemGrp(item);
 
-        input = input.toUpperCase();
-        switch (input) {
-            case 'WEAK POSITIVE':
-                return 'WeakPositiveSentiment';
+    if (item == "Boiler")
+        return "S1001000";
 
-            case 'STRONG POSITIVE':
-                return 'StrongPositiveSentiment';
+    if (item == "Stove")
+        return "P110401";
 
-            case 'POSITIVE':
-                return 'StrongPositiveSentiment';
+    if (item == "Compressor")
+        return "P120101";
+    return "";
 
-            case 'NEUTRAL':
-                return 'NeutralSentiment';
-
-            case 'NEGATIVE':
-                return 'StrongNegativeSentiment';
-
-            case 'WEAK NEGATIVE':
-                return 'WeakNegativeSentiment';
-
-            case 'STRONG NEGATIVE':
-                return 'StrongNegativeSentiment';
-
-            case 'MAJOR PROBLEM':
-                return 'MajorProblem';
-
-            case 'MINOR PROBLEM':
-                return 'MinorProblem';
-
-            default:
-                return 'StrongPositiveSentiment';
-        }
-    }
-
-    function formatItemGrp(itemGrp) {
-        //Assures the item group name is formatted correctly
-
-        itemGrp = itemGrp.toLowerCase();
-
-        if (itemGrp == 'pc') {
-            return 'PC';
-        }
-        return toTitleCase(itemGrp)
-    }
-
-    function toTitleCase(str) {
-        //Capitlize the first letter of each word on a given string
-        return str.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-    }
-
-    function round(value, precision) {
-        var multiplier = Math.pow(10, precision || 0);
-        return Math.round(value * multiplier) / multiplier;
-    }
-
-    function formatPerc(value) {
-        return round(value * 100, 1) + "%";
-    }
-
-    function calcPerc(value1, value2) {
-        if (typeof (value2) !== 'undefined' &&
-            value2 !== 0 &&
-            typeof (value1) !== 'undefined') {
-            return round(value1 * 100 / value2, 1) + "%";
-        }
-
-        return "0%";
-    }
-
-    function getDateTime(withHour) {
-        var currentdate = new Date();
-        var datetime = currentdate.getFullYear() + "-"
-            + (currentdate.getMonth() + 1) + "-"
-            + currentdate.getDate();
-
-        if (withHour) {
-            datetime += " @ "
-                + currentdate.getHours() + ":"
-                + currentdate.getMinutes() + ":"
-                + currentdate.getSeconds();
-        }
-
-        return datetime;
-    }
-
-    function getByDProduct(item) {
-        item = formatItemGrp(item);
-
-        if (item == "Boiler")
-            return "S1001000";
-
-        if (item == "Stove")
-            return "P110401";
-
-        if (item == "Compressor")
-            return "P120101";
-        return "";
-
-    }
+}
 
 
-    // -------------------- Speech Functions Formatting -----------------------
-    function getWelcomeMessage() {
-        var message = [];
+// -------------------- Speech Functions Formatting -----------------------
+function getWelcomeMessage() {
+    var message = [];
 
-        message[0] = "Welcome to B1 Assistant. How can I help?"
-        message[1] = "Hi, I am your B1 assistant. How can I help you today?"
-        message[2] = "This is B1 assistant speaking. What is my command?"
-        message[3] = "Hello, here is B1 assistant. Let me know what do you wish."
+    message[0] = "Welcome to B1 Assistant. How can I help?"
+    message[1] = "Hi, I am your B1 assistant. How can I help you today?"
+    message[2] = "This is B1 assistant speaking. What is my command?"
+    message[3] = "Hello, here is B1 assistant. Let me know what do you wish."
 
-        return message[getRandomInt(0, message.length - 1)];
-    }
+    return message[getRandomInt(0, message.length - 1)];
+}
 
-    function getItemRecomendMessage(item) {
-        var message = [];
+function getItemRecomendMessage(item) {
+    var message = [];
 
-        message[0] = "Perhaps you would like some %s. Did I get it right?"
-        message[1] = "So, what about %s?"
-        message[2] = "Maybe, you prefer %s. Am I right this time?"
-        message[3] = "May I offer you %s? What do you think?"
-
-
-        return message[getRandomInt(0, message.length - 1)].replace(/%s/g, item);
-    }
-
-    function getItemRelatedMessage(item, item2) {
-        var message = [];
-
-        message[0] = "Can I get you also %s? It goes great with %s2.";
-        message[1] = "Would you like to add %s to your order? It's a great match with %s2."
-        message[2] = "May I add %s to this purchase? Fits good with %s2."
-
-        return message[getRandomInt(0, message.length - 1)].replace(/%s2/g, item2).replace(/%s/g, item);
-    }
-
-    // --------------- Helpers that build all of the responses -----------------------
+    message[0] = "Perhaps you would like some %s. Did I get it right?"
+    message[1] = "So, what about %s?"
+    message[2] = "Maybe, you prefer %s. Am I right this time?"
+    message[3] = "May I offer you %s? What do you think?"
 
 
-    function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
-        return {
+    return message[getRandomInt(0, message.length - 1)].replace(/%s/g, item);
+}
+
+function getItemRelatedMessage(item, item2) {
+    var message = [];
+
+    message[0] = "Can I get you also %s? It goes great with %s2.";
+    message[1] = "Would you like to add %s to your order? It's a great match with %s2."
+    message[2] = "May I add %s to this purchase? Fits good with %s2."
+
+    return message[getRandomInt(0, message.length - 1)].replace(/%s2/g, item2).replace(/%s/g, item);
+}
+
+// --------------- Helpers that build all of the responses -----------------------
+
+
+function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+    return {
+        outputSpeech: {
+            type: "PlainText",
+            text: output
+        },
+        card: {
+            type: "Standard",
+            title: title,
+            text: output,
+            image: {
+                smallImageUrl: "https://i.imgur.com/ZJFFyRa.png"
+            }
+        },
+        reprompt: {
             outputSpeech: {
                 type: "PlainText",
-                text: output
-            },
-            card: {
-                type: "Standard",
-                title: title,
-                text: output,
-                image: {
-                    smallImageUrl: "https://i.imgur.com/ZJFFyRa.png"
-                }
-            },
-            reprompt: {
-                outputSpeech: {
-                    type: "PlainText",
-                    text: repromptText
-                }
-            },
-            shouldEndSession: shouldEndSession
-        };
-    }
+                text: repromptText
+            }
+        },
+        shouldEndSession: shouldEndSession
+    };
+}
 
-    function buildResponse(sessionAttributes, speechletResponse) {
-        return {
-            version: "1.0",
-            sessionAttributes: sessionAttributes,
-            response: speechletResponse
-        };
-    }
+function buildResponse(sessionAttributes, speechletResponse) {
+    return {
+        version: "1.0",
+        sessionAttributes: sessionAttributes,
+        response: speechletResponse
+    };
+}
