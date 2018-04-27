@@ -2,28 +2,18 @@
  * This is a nodejs express web server wrapper as a standalone version of b1Assistant(b1Assistant.js) 
  * alexa skill,which is orginally based on AWS Lambda function. With this wrapper, you can deploy 
  * the b1Assistant as a standalone nodejs app on a local server or cloud env, such as SAP Cloud Platform Cloud Foundry.
+ * made by Yatsea Li - Solution Architect - Twitter: @YatseaLi
  * 
- * Steps of local deployment:
- * 1.The default port is 46999
- * 2.Change g_hdbServer = '<YOUR HANA HOST or IP Address HERE!>' to your HANA host or IP.
- * 3.(Optional if you need to open the local server for public internet access)Download ngrok from https://ngrok.com/download
- * 4.(Optional if using ngrok to public internet access)Run ngrok with command: ./ngrok http 46999
- * 5.Copy the public url of standalone b1Assistant nodejs app to the configuration of b1Assistant 
- * alexa skill as the end point.
+ * If running on a local NodeJs server or in the Cloud the following environment variables must be set:
+ *  "SMB_SERVER": <Your ERP Server>
+ *  "SMB_PORT": <Your ERP Portr>
+ *  "SMB_PATH": <Your Odata main endpointr>
+ *  "SMB_COMP": <CompanyDB if required (like in B1)>,
+ *  "SMB_AUTH": <Base 64 User/Password>,
+ *  "SMB_DEFAULT_BP": <Default Business Partner code to create documents>
  * 
- * Steps of SAP Cloud Platform Cloud Foundry:
- * 1.The port will be allocated by Cloud Foundry when the app is started.
- * 2.Change g_hdbServer = '<YOUR HANA HOST or IP Address HERE!>' to your HANA host or IP.
- * 3.Deploy the b1Assistant nodejs app to SCP CF with command: cf push
- * 4.5.Copy the public url of standalone b1Assistant nodejs app to the configuration of b1Assistant 
- * alexa skill as the end point.
- * 
- * Athors: 
- * Yatsea Li - Solution Architect - Twitter: @YatseaLi
- * All rights resversed by SAP SE
- * last mondifed on July 27 2017
- * License: This is not an offiical solution from SAP. The code is published with SCN AS-IS license.
- * You can download and modify this code by yourself. No SAP official support available.
+ * For more information please check the github repository
+ * https://github.com/Ralphive/byDAssistant
  */
 
 //begin of wrapper for https endpoint of b1Assistant.js
