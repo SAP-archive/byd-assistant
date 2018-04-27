@@ -1,22 +1,12 @@
-# This files are NOT part of the HANA XS Application 
-The alexa skill b1Assistant.js has been moved from ./skill folder to ./skill/nodejs folder for sharing the same code between AWS Lambda function and stand alone alexa deloyment below.
+## This files are NOT part of the backend Application
 
-Apart from deployment with AWS Lambda function,  Now you also can deploy the alexa skill locally or cloud foundry as standalone nodejs app. Follow the steps below:
+They should be used to create the [Alexa Skill](https://developer.amazon.com/alexa-skills-kit/learn) responsible for making the requests to the nodejs app
 
-### Step 1: Deploy the standalone b1Assistant locally or on a cloud platform with node run-time. 
-   - To deploy locally, run the command below:
-```sh
-$ cd ./skill/nodejs
-$ npm install
-$ npm start
-```
-   - To deploy on SAP Cloud Platform Cloud Foundry, run the command below:
-```sh
-$ cd ./skill/nodejs
-$ cf push
-```
+### How to do it:
+*  Create an [Amazon Developer Account](https://developer.amazon.com/)
+* Follow the **STEP 2** of [this tutorial](https://developer.amazon.com/alexa-skills-kit/alexa-skill-quick-start-tutorial) to create your Alexa skill
+* When configuring the **intent schema** (step 8) use the content of [IntentSchema.json](IntentSchema.json) to have all set
+* When setting the **Endpoint** (step 14) choose **HTTPS** and point to the URL of your app in the SAP Cloud Platform
 
-If you are new to SAP Cloud Platform Cloud Foundry, please refer to this youtube video:
-https://youtu.be/fOraTnTZktI
-
-### Step 2: Update the end point of alexa skill with HTTPS instead of AWS Lambda ARN in the configuration section of your Alexa skill.
+### Test
+On the [Step 3](https://developer.amazon.com/alexa-skills-kit/alexa-skill-quick-start-tutorial) you will find 3 ways to test if your skill is working.
