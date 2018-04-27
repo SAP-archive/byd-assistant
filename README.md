@@ -8,4 +8,3 @@ Configure your Alexa Skill with the skill/IntentSchema.json file
 
 ## License
 BYD Assistant prototype is released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/MIT.
-
