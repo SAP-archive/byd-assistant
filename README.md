@@ -1,5 +1,6 @@
 # ByD Assistant
-## A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business by Design and Amazon Echo
+
+A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business by Design and Amazon Echo
 
 ## Pre Requisites
 * A free trial account on  [SAP Cloud Platform](https://cloudplatform.sap.com) with **Cloud Foundry Trial** initialized
