@@ -44,6 +44,9 @@ You will see your backend URL (to be used in the next step)
 ### STEP 3: Configure the Alexa Skill
 * Follow the steps int he [skill](skill/) folder to create your Alexa Skill and have it connected to the SAP Cloud Platform
 
+##Test it
+* [Now you can talk to your SAP Business By Design](https://www.youtube.com/edit?o=U&video_id=tWBh9zDPaJc)
+
 
 ## License
 BYD Assistant prototype is released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/MIT.
