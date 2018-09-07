@@ -1,94 +1,140 @@
 {
-  "intents": [
-    {
-      "intent": "GetTopItems",
-      "slots": [
-        {
-          "name": "TopNo",
-          "type": "AMAZON.NUMBER"
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "b.y.d.",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "SayHello",
+                    "slots": [
+                        {
+                            "name": "FirstName",
+                            "type": "AMAZON.US_FIRST_NAME"
+                        }
+                    ],
+                    "samples": [
+                        "Say hi to {FirstName}",
+                        "Salute our friend {FirstName}"
+                    ]
+                },
+                {
+                    "name": "MakePurchase",
+                    "slots": [
+                        {
+                            "name": "ItemName",
+                            "type": "SAP_ITEMS"
+                        },
+                        {
+                            "name": "Quantity",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "buy me {Quantity} unities of {ItemName}",
+                        "buy me {ItemName}",
+                        "{ItemName}",
+                        "I need supplies",
+                        "{Quantity} unities",
+                        "{Quantity} packs",
+                        "{Quantity} pieces",
+                        "I need {Quantity} unities",
+                        "I need {Quantity} packs",
+                        "I need {Quantity} pieces"
+                    ]
+                },
+                {
+                    "name": "SalesInfo",
+                    "slots": [
+                        {
+                            "name": "SalesQuarter",
+                            "type": "SAP_QUARTERS"
+                        },
+                        {
+                            "name": "SalesYear",
+                            "type": "AMAZON.DATE"
+                        }
+                    ],
+                    "samples": [
+                        "{SalesQuarter}",
+                        "{SalesYear}",
+                        "{SalesQuarter} quarter of {SalesYear}",
+                        "{SalesQuarter} of {SalesYear}",
+                        "show me sales numbers",
+                        "give me sales info"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "SAP_QUARTERS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "last"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "this",
+                                "synonyms": [
+                                    "current"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fourth"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "third"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "second"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "first"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "SAP_ITEMS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Compressor"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stove"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Boiler"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "intent": "GetSalesGroups",
-      "slots": [
-        {
-          "name": "ItemGroup",
-          "type": "SAP_GROUPS"
-        }
-      ]
-    },
-    {
-      "intent": "SayHello",      
-      "slots": [
-        {
-          "name": "FirstName",
-          "type": "AMAZON.US_FIRST_NAME"
-        }
-      ]    },
-    {
-      "intent": "MakePurchase",      
-      "slots": [
-        {
-          "name": "ItemName",
-          "type": "SAP_ITEMS"
-        },
-        {
-          "name": "Quantity",
-          "type": "AMAZON.NUMBER"
-        },
-        {
-          "name": "ItemRecom",
-          "type": "SAP_ITEMS"
-        }
-      ]
-    },
-    {
-      "intent": "SalesInfo",      
-      "slots": [
-        {
-          "name": "ItemGroup",
-          "type": "SAP_GROUPS"
-        },
-        {
-          "name": "SalesQuarter",
-          "type": "SAP_QUARTERS"
-        },
-        {
-          "name": "SalesYear",
-          "type": "AMAZON.NUMBER"
-        }
-      ]    
-    },
-    {
-      "intent": "SaleRecommend"
-    },
-    {
-      "intent": "BusinessInfo"
-    },
-    {
-      "intent": "SocialMediaInfo"
-    },
-    {
-      "intent": "ReadTweets",      
-      "slots": [
-        {
-          "name": "Sentiments",
-          "type": "SAP_SENTIMENTS"
-        }
-      ]
-    },
-    {
-      "intent": "AMAZON.NoIntent"
-    },
-    {
-      "intent": "AMAZON.YesIntent"
-    },
-    {
-      "intent": "AMAZON.CancelIntent"
-    },
-    {
-      "intent": "AMAZON.StopIntent"
     }
-  ]
 }
