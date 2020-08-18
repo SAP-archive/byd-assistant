@@ -8,7 +8,7 @@ A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP
 
 ## Installation
 ### STEP 1: ByD OData API
-* Import the all the available [models](models/) in the [SAP Businesss ByDesign Odata Services](https://www.youtube.com/watch?v=z6mF_1hFths)
+* Import [this sales orders model](https://github.com/SAP-samples/sapbydesign-api-samples/blob/master/Custom%20OData%20Services/khsalesorder.xml) in the [SAP Businesss ByDesign Odata Services](https://www.youtube.com/watch?v=z6mF_1hFths)
 * Activate the models and take note of the **service URL**
 
 ### STEP 2: Deployment of the ByD Assistant Backend in the SAP Cloud Platform
