@@ -4,7 +4,7 @@ A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP
 
 ## Pre Requisites
 * A free trial account on  [SAP Cloud Platform](https://cloudplatform.sap.com) with **Cloud Foundry Trial** initialized
-* Install and configure the [Cloud Foundry Command Line Interface (CLI)](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/75125ef1e60e490e91eb58fe48c0f9e7.html#loio4ef907afb1254e8286882a2bdef0edf4) on your machine.
+* Install and configure the [Cloud Foundry Command Line Interface (CLI)](https://developers.sap.com/tutorials/cp-cf-download-cli.html) on your machine.
 
 ## Installation
 ### STEP 1: ByD OData API
