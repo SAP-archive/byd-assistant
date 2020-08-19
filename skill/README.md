@@ -8,5 +8,3 @@ They should be used to create the [Alexa Skill](https://developer.amazon.com/ale
 * When configuring the **intent schema** use the content of [IntentSchema.json](IntentSchema.json) to have all set
 * When setting the **Endpoint** choose **HTTPS** and point to the URL of your app in the SAP Cloud Platform
 
-### Test
-On the [Step 3](https://developer.amazon.com/alexa-skills-kit/alexa-skill-quick-start-tutorial) you will find 3 ways to test if your skill is working.
