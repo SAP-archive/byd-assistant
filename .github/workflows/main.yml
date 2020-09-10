@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: CF CLI Action
-        uses: citizen-of-planet-earth/cf-cli-action@master
+        uses: citizen-of-planet-earth/cf-cli-action@v1
         with:
           # Target API Endpoint of Cloud Foundry
           cf_api: https://api.cf.eu10.hana.ondemand.com
