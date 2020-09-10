@@ -35,7 +35,7 @@ jobs:
           # Password for API authentication
           cf_password: $SCP_PASSWORD
           # Target Organization
-          cf_org: 2
+          cf_org: $SCP_ORG
           # Target Space
           # Command to run using CF CLI
           command: cf push
