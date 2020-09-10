@@ -28,9 +28,9 @@ jobs:
           # Target API Endpoint of Cloud Foundry
           cf_api: https://api.cf.eu10.hana.ondemand.com
           # Username for API authentication
-          cf_username: ${{secrets.SCP_USER }}
+          cf_username: ${{ secrets.SCP_USER }}
           # Password for API authentication
-          cf_password: ${{secrets.PASSWORD }}
+          cf_password: ${{ secrets.SCP_PASSWORD }}
           # Target Organization
-          cf_org: ${{secrets.SCP_ORG }}
+          cf_org: ${{ secrets.SCP_ORG }}
           command: cf push
