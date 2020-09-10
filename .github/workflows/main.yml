@@ -33,4 +33,5 @@ jobs:
           cf_password: ${{ secrets.SCP_PASSWORD }}
           # Target Organization
           cf_org: ${{ secrets.SCP_ORG }}
-          command: cf push
+          cf_space: dev
+          command: push
