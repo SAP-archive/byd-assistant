@@ -31,9 +31,9 @@ jobs:
           # Target API Endpoint of Cloud Foundry
           cf_api: https://api.cf.eu10.hana.ondemand.com
           # Username for API authentication
-          cf_username: test@test.com
+          cf_username: $SCP_USER
           # Password for API authentication
-          cf_password: test
+          cf_password: $SCP_PASSWORD
           # Target Organization
           cf_org: 2
           # Target Space
