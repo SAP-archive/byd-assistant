@@ -29,5 +29,13 @@
             "The sales for the %QUARTER% quarter of %YEAR% are %AMOUNT% %CURRENCY%"
             ],
         "reprompt" :[]
-    }        
+    }, 
+    "noSales":
+    {
+        "title": "Sales Reports",
+        "message" :[
+            "I am sorry but there are no sales for the %QUARTER% quarter of %YEAR%"
+            ],
+        "reprompt" :[]
+    }     
 }
