@@ -102,7 +102,7 @@ function onIntent(intentRequest, session, callback) {
             break;
 
         case "AMAZON.HelpIntent":
-            getWelcomeResponse(callback);
+            getHelpResponse(callback);
             break;
 
         default:
@@ -124,6 +124,22 @@ function onSessionEnded(sessionEndedRequest, session) {
 function getWelcomeResponse(callback) {
     var sessionAttributes = {};
     const message = MESSAGE.welcome(LANG)
+    var shouldEndSession = false;
+  
+    callback(
+      sessionAttributes,
+      buildSpeechletResponse(
+        message.title,
+        message.output,
+        message.reprompt,
+        shouldEndSession
+      )
+    );
+  }
+
+function getHelpResponse(callback) {
+    var sessionAttributes = {};
+    const message = MESSAGE.help(LANG);
     var shouldEndSession = false;
   
     callback(
