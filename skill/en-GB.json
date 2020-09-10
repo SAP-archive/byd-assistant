@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "b.y.d.",
+            "invocationName": "b. y. d",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -9,24 +9,16 @@
                 },
                 {
                     "name": "AMAZON.HelpIntent",
-                    "samples": []
+                    "samples": [
+                        "help",
+                        "how can you help me",
+                        "what can you do",
+                        "what do you do"
+                    ]
                 },
                 {
                     "name": "AMAZON.StopIntent",
                     "samples": []
-                },
-                {
-                    "name": "SayHello",
-                    "slots": [
-                        {
-                            "name": "FirstName",
-                            "type": "AMAZON.US_FIRST_NAME"
-                        }
-                    ],
-                    "samples": [
-                        "Say hi to {FirstName}",
-                        "Salute our friend {FirstName}"
-                    ]
                 },
                 {
                     "name": "MakePurchase",
@@ -58,11 +50,18 @@
                     "slots": [
                         {
                             "name": "SalesQuarter",
-                            "type": "SAP_QUARTERS"
+                            "type": "SAP_QUARTERS",
+                            "samples": [
+                                "{SalesQuarter}",
+                                "{SalesQuarter} quarter"
+                            ]
                         },
                         {
                             "name": "SalesYear",
-                            "type": "AMAZON.DATE"
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "{SalesYear}"
+                            ]
                         }
                     ],
                     "samples": [
@@ -73,25 +72,24 @@
                         "show me sales numbers",
                         "give me sales info"
                     ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
                 }
             ],
             "types": [
                 {
                     "name": "SAP_QUARTERS",
                     "values": [
-                        {
-                            "name": {
-                                "value": "last"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "this",
-                                "synonyms": [
-                                    "current"
-                                ]
-                            }
-                        },
                         {
                             "name": {
                                 "value": "fourth"
@@ -135,6 +133,79 @@
                     ]
                 }
             ]
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "SalesInfo",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "SalesQuarter",
+                            "type": "SAP_QUARTERS",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.976776143579.376416263902"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.261777776730.36457673745.187009367255"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "SalesYear",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.976776143579.810689598335"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Slot.Validation.261777776730.36457673745.187009367255",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "I didn't get it. "
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "I am sorry, could you repeat that?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Pardon?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.976776143579.810689598335",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "For what year?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.976776143579.376416263902",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "For what quarter?"
+                    }
+                ]
+            }
+        ]
     }
 }
