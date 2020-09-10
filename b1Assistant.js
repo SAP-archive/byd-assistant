@@ -12,18 +12,12 @@ var g_hdbServer = process.env.SMB_SERVER;
 var g_hdbPort = process.env.SMB_PORT;
 var g_hdbService = process.env.SMB_PATH;
 
+const MESSAGE = require("./lib/messageParser")
+var   LANG = "";
+
 exports.handler = function (event, context) {
     try {
-        //console.log("event.session.application.applicationId=" + event.session.application.applicationId);
-
-        /**
-         * prevent someone else from configuring a skill that sends requests to this function.
-         * To be uncommented when SKill is ready
-        
-        if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.c014e6d6-a7a4-44ee-8b2f-9b10c7969743") {
-             context.fail("Invalid Application ID");
-        }p
-         */
+        LANG = event.request.locale?event.request.locale:process.env.LANG;
 
         if (event.session.new) {
             onSessionStarted({
@@ -128,19 +122,20 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // --------------- Functions that control the skill's behavior -----------------------
 function getWelcomeResponse(callback) {
-
     var sessionAttributes = {};
-    var cardTitle = "Welcome";
-    var speechOutput = getWelcomeMessage();
-
-    // If the user either does not reply to the welcome message or says something that is not
-    // understood, they will be prompted again with this text.
-    var repromptText = 'What is my command, master?';
+    const message = MESSAGE.welcome(LANG)
     var shouldEndSession = false;
-
-    callback(sessionAttributes,
-        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-}
+  
+    callback(
+      sessionAttributes,
+      buildSpeechletResponse(
+        message.title,
+        message.output,
+        message.reprompt,
+        shouldEndSession
+      )
+    );
+  }
 
 function handleSessionEndRequest(callback) {
     var cardTitle = "Session Ended";
