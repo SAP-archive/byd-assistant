@@ -4,28 +4,26 @@ on:
   push:
     branches:
     - master
-
 jobs:
   build:
     runs-on: ubuntu-18.04
     # Build your app here
-
   deploy:
     runs-on: ubuntu-18.04
     needs: build
-    
+  
     steps:
-    - uses: citizen-of-planet-earth/cf-cli-action@master
-      with:
-        # Target API Endpoint of Cloud Foundry
-        cf_api: https://api.cf.eu10.hana.ondemand.com
-        # Username for API authentication
-        cf_username: $SCP_USER
-        # Password for API authentication
-        cf_password: $SCP_PASSWORD
-        # Target Organization
-        cf_org: $SCP_ORG
-        # Target Space
-        # Command to run using CF CLI
-        command: cf push -f manifest.yml
+      - uses: citizen-of-planet-earth/cf-cli-action@master
+        with:
+          # Target API Endpoint of Cloud Foundry
+          cf_api: https://api.cf.eu10.hana.ondemand.com
+          # Username for API authentication
+          cf_username: $SCP_USER
+          # Password for API authentication
+          cf_password: $SCP_PASSWORD
+          # Target Organization
+          cf_org: $SCP_ORG
+          # Target Space
+          # Command to run using CF CLI
+          command: cf push -f manifest.yml
 
