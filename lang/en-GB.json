@@ -1,0 +1,33 @@
+{
+    "welcome":{
+        "title": "Welcome to B.Y.D Assistant!",
+        "message" :[
+            "Welcome to B.Y.D . How can I help?",
+            "This is your B.Y.D Assistant . How can I help?",
+            "Hello, B.Y.D Assistant here. What do you need?"
+            ],
+        "reprompt" :[
+                "What is my command?",
+                "You can say: 'Help' or 'What can you do?' for  assistance"
+                ]
+    },
+    "help":
+    {
+        "title": "How I can help.",
+        "message" :[
+            "Currently, I can provide sales reports. Just say: I need sales info, or, show me the sales numbers. I will be happy to help."
+            ],
+        "reprompt" :[
+                "So, what's gonna be?"
+                ]
+    },
+    
+    "sales":
+    {
+        "title": "Sales Reports",
+        "message" :[
+            "The sales for the %QUARTER% quarter of %YEAR% are %AMOUNT% %CURRENCY%"
+            ],
+        "reprompt" :[]
+    }        
+}
