@@ -168,21 +168,6 @@ function handleSessionEndRequest(callback) {
 /**
  * BYD Interactions
  */
-function sayHello(intent, session, callback) {
-
-    var cardTitle = intent.name;
-    var repromptText = "";
-    var sessionAttributes = {};
-    var shouldEndSession = true;
-    var speechOutput = "";
-
-    speechOutput = "Hi there! I am the Be One Assistant. I am here to help you with S-A-P Business One! Just ask!"
-
-    callback(sessionAttributes,
-        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-}
-
-
 function getSalesInfo(intent, session, callback) {
 
     //Default
@@ -197,69 +182,51 @@ function getSalesInfo(intent, session, callback) {
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'SalesQuarter', SalesQuarter);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'SalesYear', SalesYear);
 
-    if (SalesQuarter == null) {
-        speechOutput = "Got it! What quarter?";
-        repromptText = "Tell me the quarter and the year.";
-    } else if (SalesYear == null) {
-        speechOutput = "What year do you need?";
-        repromptText = "You can do it, tell me a year.";
-    } else {
+    var b1Quarter = formatQuarter(SalesQuarter);
+    var oDataEndpoint = "/SalesOrderCollection"
+    var oDataFilter = '$select=NetAmount,NetAmountCurrencyCode,DateTime&$filter=' +
+        'DateTime' + op('ge') + beginQuarter(b1Quarter, SalesYear) + op('and') +
+        'DateTime' + op('le') + endQuarter(b1Quarter, SalesYear);
 
-        var b1Quarter = formatQuarter(SalesQuarter);
-        var oDataEndpoint = "/SalesOrderCollection"
-        var oDataFilter = '$select=NetAmount,currencyCode,DateTime&$filter=' +
-            'DateTime' + op('ge') + beginQuarter(b1Quarter, SalesYear) + op('and') +
-            'DateTime' + op('le') + endQuarter(b1Quarter, SalesYear);
+    //Avoid unescaped characters
+    oDataFilter = oDataFilter.replace(/ /g, "%20");
 
-        //Avoid unescaped characters
-        oDataFilter = oDataFilter.replace(/ /g, "%20");
+    console.log('OdataFilter = ' + oDataFilter);
 
-        console.log('OdataFilter = ' + oDataFilter);
+    getCall(
+        oDataEndpoint, // Endpoint
+        "?$format=json&" + oDataFilter, //Filter
 
-        getCall(
-            oDataEndpoint, // Endpoint
-            "?$format=json&" + oDataFilter, //Filter
+        function (response) {
+            console.log("response is " + response);
+            response = response.d.results;
 
-            function (response) {
-                console.log("response is " + response);
-                response = response.d.results;
+            var messageParams = {"%YEAR%": SalesYear,"%QUARTER%":SalesQuarter}
+            var message;
 
-                if (response.length == 0) {
-                    speechOutput = "I am sorry, but there are no" +
-                        " sales in the " + SalesQuarter + " quarter of " + SalesYear;
-
-                } else {
-                    var totalSales = 0;
-                    for (var i = 0; i < response.length; i++) {
-                        totalSales += Math.round(response[i].NetAmount, 2);
-                    }
-                    speechOutput = "The sales for the " + stringQuarter(b1Quarter) + " quarter of " +
-                        SalesYear + " are " + totalSales + " " +
-                        response[0].currencyCode + ".";
+            if (response.length == 0) {
+                message = MESSAGE.noSales(LANG, messageParams)
+            } else {
+                var totalSales = 0;
+                for (var i = 0; i < response.length; i++) {
+                    totalSales += Math.round(response[i].NetAmount, 2);
                 }
-                shouldEndSession = true;
-
-                // call back with result
-                callback(sessionAttributes,
-                    buildSpeechletResponse(
-                        intent.name, speechOutput,
-                        repromptText, shouldEndSession
-                    )
-                );
+                messageParams["%AMOUNT%"] = totalSales
+                messageParams["%CURRENCY%"] = response[0].NetAmountCurrencyCode
+                message = MESSAGE.sales(LANG, messageParams)
             }
-        );
-        return;
-    }
+            shouldEndSession = true;
 
-    sessionAttributes = handleSessionAttributes(sessionAttributes, 'PreviousIntent', intent.name);
-
-
-    // Call back while there still questions to ask
-    callback(sessionAttributes,
-        buildSpeechletResponse(
-            intent.name, speechOutput,
-            repromptText, shouldEndSession
-        )
+            // call back with result
+            callback(sessionAttributes,
+                buildSpeechletResponse(
+                    message.title,
+                    message.output,
+                    message.reprompt,
+                    shouldEndSession
+                  )
+            );
+        }
     );
 }
 
