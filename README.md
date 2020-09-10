@@ -1,4 +1,4 @@
-# ByD Assistant
+# ByD Assistant ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
 
 A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business by Design and Amazon Echo
 
