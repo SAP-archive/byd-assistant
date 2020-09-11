@@ -176,11 +176,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "I didn't get it. "
+                        "value": "Je n'ai pas bien saisi. "
                     },
                     {
                         "type": "PlainText",
-                        "value": "I am sorry, could you repeat that?"
+                        "value": "Désolée pouvez-vous répéter?"
                     },
                     {
                         "type": "PlainText",
