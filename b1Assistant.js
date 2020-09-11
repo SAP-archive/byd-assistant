@@ -399,10 +399,6 @@ function op(op) {
     return "%20" + op + "%20";
 }
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 function formatQuarter(input) {
 
     if (input == 'first' || input == '1st' || input == 'Q1') {
@@ -474,25 +470,6 @@ function endQuarter(quarter, year) {
     }
 }
 
-
-function formatItemGrp(itemGrp) {
-    //Assures the item group name is formatted correctly
-
-    itemGrp = itemGrp.toLowerCase();
-
-    if (itemGrp == 'pc') {
-        return 'PC';
-    }
-    return toTitleCase(itemGrp)
-}
-
-function toTitleCase(str) {
-    //Capitlize the first letter of each word on a given string
-    return str.replace(/\w\S*/g, function (txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
-
 function getDateTime(withHour) {
     var currentdate = new Date();
     var datetime = currentdate.getFullYear() + "-"
@@ -507,34 +484,6 @@ function getDateTime(withHour) {
     }
 
     return datetime;
-}
-
-function getByDProduct(item) {
-    item = formatItemGrp(item);
-
-    if (item == "Boiler")
-        return "P100401";
-
-    if (item == "Stove")
-        return "P110401";
-
-    if (item == "Compressor")
-        return "P120101";
-    return "";
-
-}
-
-
-// -------------------- Speech Functions Formatting -----------------------
-function getWelcomeMessage() {
-    var message = [];
-
-    message[0] = "Welcome to BYD Assistant. How can I help?"
-    message[1] = "Hi, I am your BYD assistant. How can I help you today?"
-    message[2] = "This is BYD assistant speaking. What is my command?"
-    message[3] = "Hello! Here is BYD assistant. Let me know what do you wish."
-
-    return message[getRandomInt(0, message.length - 1)];
 }
 
 // --------------- Helpers that build all of the responses -----------------------
