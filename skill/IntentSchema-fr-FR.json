@@ -166,6 +166,33 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "MakePurchase",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.805251402209"
+                    },
+                    "slots": [
+                        {
+                            "name": "ItemName",
+                            "type": "SAP_ITEMS",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.805251402209.1302449313357"
+                            }
+                        },
+                        {
+                            "name": "Quantity",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.805251402209.408328358357"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -203,6 +230,37 @@
                     {
                         "type": "PlainText",
                         "value": "Quel trimestre?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.805251402209.1302449313357",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Should I get you a compressor, a gas boiler or maybe a stove?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.805251402209.408328358357",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tell me the quantity you need"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Ok, how many do you need?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.805251402209",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "I will place your {ItemName} order. Do you confirm?"
                     }
                 ]
             }

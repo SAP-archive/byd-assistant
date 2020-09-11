@@ -32,7 +32,7 @@
                         },
                         {
                             "name": "Quantity",
-                            "type": "SAP_ITEMS"
+                            "type": "AMAZON.NUMBER"
                         }
                     ],
                     "samples": [
@@ -188,7 +188,7 @@
                         },
                         {
                             "name": "Quantity",
-                            "type": "SAP_ITEMS",
+                            "type": "AMAZON.NUMBER",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
                             "prompts": {
