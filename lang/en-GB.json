@@ -15,7 +15,8 @@
     {
         "title": "How I can help.",
         "message" :[
-            "Currently, I can provide sales reports. Just say: I need sales info, or, show me the sales numbers. I will be happy to help."
+            "Currently, I can provide sales reports and create orders. Just say: show me the sales numbers, or, I need supplies.",
+            "I am able to tell you the quarterly sales figures and create a sales order. You just need to ask."
             ],
         "reprompt" :[
                 "So, what's gonna be?"
