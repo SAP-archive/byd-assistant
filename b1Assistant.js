@@ -248,7 +248,7 @@ function postPurchase(intent, session, callback) {
 
 
     if (ItemName == null) {
-        speechOutput = "Should I get you a compressor, a gas boiler or maybe a stove?.";
+        speechOutput = "Should I get you a compressor, a gas boiler or maybe a stove?";
         repromptText = "You can say. I need a gas boiler. Or Buy me a stove";
     } else if (Quantity == null) {
         speechOutput = "Ok, how many do you need?";
