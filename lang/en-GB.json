@@ -37,5 +37,22 @@
             "I am sorry but there are no sales for the %QUARTER% quarter of %YEAR%"
             ],
         "reprompt" :[]
-    }     
+    },
+
+    "salesOrder":
+    {
+        "title": "Order Created",
+        "message" :[
+            "Your order %ORDER% was created successfuly. The total amount of your purchase is %AMOUNT% %CURRENCY%"
+            ],
+        "reprompt" :[]
+    },
+    "noSalesOrder":
+    {
+        "title": "Couldn't create the order",
+        "message" :[
+            "I am sorry, there was a problem placing your order. Please try again later."
+            ],
+        "reprompt" :[]
+    }
 }
