@@ -246,98 +246,82 @@ function postPurchase(intent, session, callback) {
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'Quantity', Quantity);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'PreviousIntent', intent.name);
 
+    var message;
 
-    if (ItemName == null) {
-        speechOutput = "Should I get you a compressor, a gas boiler or maybe a stove?";
-        repromptText = "You can say. I need a gas boiler. Or Buy me a stove";
-    } else if (Quantity == null) {
-        speechOutput = "Ok, how many do you need?";
-        repromptText = "Tell me the quantity you need.";
-    } else {
+    /* ByD Requires a CSRF Token in every POST Request.
+    This token is provided by a GET with Authentication */
+    getCall("/", "", function (body, response) { //Callback Function
 
-        /* ByD Requires a CSRF Token in every POST Request.
-        This token is provided by a GET with Authentication */
-        getCall("/", "", function (body, response) { //Callback Function
+        console.log("response is " + response);
+        if (response.statusCode != 200) {
+            message = MESSAGE.noSalesOrder(LANG)
+        } else {
+            console.log("CSRF Token retrived. Preparing post request for Sales Order Creation")
 
-            console.log("response is " + response);
-            if (response.statusCode != 200) {
-                speechOutput = "I am sorry, but there was an error processing this request";
-            } else {
+            var http = require('request');
 
-                var http = require('request');
+            var body = {
+                "ExternalReference": "Alexa "+LANG,
+                "DataOriginTypeCode": "4",
+                "Name": "via Alexa on " + getDateTime(true),
+                "BuyerParty": {
+                    "PartyID": process.env.SMB_DEFAULT_BP
+                },
+                "Item": [
+                    {
+                        "ID": "10",
+                        "ItemProduct": {
+                            "ProductID": getByDProduct(ItemName)
+                        },
+                        "ItemScheduleLine": [
+                            {
+                                "Quantity": Quantity
+                            }
+                        ]
+                    }
+                ]
+            }
 
-                var body = {
-                    "ExternalReference": "From Alexa",
-                    "DataOriginTypeCode": "1",
-                    "Name": "Order created via Alexa on " + getDateTime(true),
-                    "SalesOrderBuyerParty": {
-                        "PartyID": process.env.SMB_DEFAULT_BP
-                    },
-                    "SalesOrderItem": [
-                        {
-                            "ID": "10",
-                            "SalesOrderItemProduct": {
-                                "ProductID": getByDProduct(ItemName)
-                            },
-                            "SalesOrderItemScheduleLine": [
-                                {
-                                    "Quantity": Quantity
-                                }
-                            ]
-                        }
-                    ]
+            var options = {
+                uri: g_hdbServer + g_hdbPort + g_hdbService + "/SalesOrderCollection",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "x-csrf-token": response.headers["x-csrf-token"], //Damm Token
+                    "cookie": response.headers["set-cookie"]
+                },
+                body: JSON.stringify(body)
+            };
+
+            http.post(options, function (error, res, body) {
+                console.log("Response: " + res.statusCode);
+                if (!error && res.statusCode == 201) {
+
+                    body = JSON.parse(body);
+                    body = body.d.results;
+                    console.log("Order " + body.ID + " created!")
+
+                    const messageParams = {"%ORDER%": body.ID,"%AMOUNT%":body.NetAmount, "%CURRENCY%":body.NetAmountCurrencyCode}
+                    message = MESSAGE.salesOrder(LANG, messageParams)
+                    shouldEndSession = true;
+                }
+                else {
+                    message = MESSAGE.noSalesOrder(LANG)
                 }
 
-                var options = {
-                    uri: g_hdbServer + g_hdbPort + g_hdbService + "/SalesOrderCollection",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        "x-csrf-token": response.headers["x-csrf-token"], //Damm Token
-                        "cookie": response.headers["set-cookie"]
-                    },
-                    body: JSON.stringify(body)
-                };
+                // call back with result
+                callback(sessionAttributes,
+                    buildSpeechletResponse(
+                        message.title,
+                        message.output,
+                        message.reprompt,
+                        shouldEndSession
+                    ));
+            });
 
-                console.log('start request to ' + options.uri)
+        }
+    })
 
-                http.post(options, function (error, res, body) {
-                    console.log("Response: " + res.statusCode);
-                    if (!error && res.statusCode == 201) {
-
-                        body = JSON.parse(body);
-                        body = body.d.results;
-                        console.log("Order " + body.ID + " created!")
-
-                        speechOutput = "Your order number " + body.ID + " was placed successfully! " +
-                            "The total amount of your purchase is " + body.NetAmount +
-                            " " + body.currencyCode;
-
-                        shouldEndSession = true;
-                    }
-                    else {
-                        speechOutput = "I am sorry, but there was an error creating your order.";
-                    }
-
-                    // call back with result
-                    callback(sessionAttributes,
-                        buildSpeechletResponse(
-                            intent.name, speechOutput,
-                            repromptText, shouldEndSession)
-                    );
-                });
-
-            }
-        })
-        return
-    }
-    // Call back while there still questions to ask
-    callback(sessionAttributes,
-        buildSpeechletResponse(
-            intent.name, speechOutput,
-            repromptText, shouldEndSession
-        )
-    );
 }
 
 function getCall(endPoint, filter, callback) {
