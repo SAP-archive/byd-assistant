@@ -301,7 +301,10 @@ function postPurchase(intent, session, callback) {
                     body = body.d.results;
                     console.log("Order " + body.ID + " created!")
 
-                    const messageParams = {"%ORDER%": body.ID,"%AMOUNT%":body.NetAmount, "%CURRENCY%":body.NetAmountCurrencyCode}
+                    const messageParams = {
+                                        "%ORDER%": body.ID,
+                                        "%AMOUNT%":Math.round((body.NetAmount + Number.EPSILON) * 100) / 100, 
+                                        "%CURRENCY%":body.NetAmountCurrencyCodeText}
                     message = MESSAGE.salesOrder(LANG, messageParams)
                     shouldEndSession = true;
                 }
