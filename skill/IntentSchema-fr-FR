@@ -1,0 +1,211 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "b. y. d",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "aide-moi",
+                        "comment peux-tu m'aider",
+                        "qu'est-ce que tu peux faire",
+                        "qu'est-ce que tu fais"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "MakePurchase",
+                    "slots": [
+                        {
+                            "name": "ItemName",
+                            "type": "SAP_ITEMS"
+                        },
+                        {
+                            "name": "Quantity",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "achète moi {Quantity} unités de {ItemName}",
+                        "achète moi {ItemName}",
+                        "{ItemName}",
+                        "J'ai besoin de matériel",
+                        "{Quantity} unités",
+                        "{Quantity} packs",
+                        "{Quantity} pièces",
+                        "J'ai besoin de {Quantity} unitiés",
+                        "J'ai besoin de {Quantity} packs",
+                        "J'ai besoin de {Quantity} pièces"
+                    ]
+                },
+                {
+                    "name": "SalesInfo",
+                    "slots": [
+                        {
+                            "name": "SalesQuarter",
+                            "type": "SAP_QUARTERS",
+                            "samples": [
+                                "{SalesQuarter}",
+                                "{SalesQuarter} trimestre"
+                            ]
+                        },
+                        {
+                            "name": "SalesYear",
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "{SalesYear}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{SalesQuarter}",
+                        "{SalesYear}",
+                        "{SalesQuarter} trimestre {SalesYear}",
+                        "{SalesQuarter} {SalesYear}",
+                        "donne moi le chiffre d'affaire",
+                        "je veux connaitre le revenu"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                }
+            ],
+            "types": [
+                {
+                    "name": "SAP_QUARTERS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "quatrième"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "troisième"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "second"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "premier"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "SAP_ITEMS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Compresseur"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Fourneau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Chaudière"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "SalesInfo",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "SalesQuarter",
+                            "type": "SAP_QUARTERS",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.976776143579.376416263902"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.261777776730.36457673745.187009367255"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "SalesYear",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.976776143579.810689598335"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Slot.Validation.261777776730.36457673745.187009367255",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Je n'ai pas bien saisi. "
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Désolée pouvez-vous répéter?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Pardon?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.976776143579.810689598335",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Quelle année?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.976776143579.376416263902",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Quel trimestre?"
+                    }
+                ]
+            }
+        ]
+    }
+}
