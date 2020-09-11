@@ -119,16 +119,19 @@
                     "name": "SAP_ITEMS",
                     "values": [
                         {
+                            "id": "P120101",
                             "name": {
                                 "value": "Compressor"
                             }
                         },
                         {
+                            "id": "P110401",
                             "name": {
                                 "value": "Stove"
                             }
                         },
                         {
+                            "id": "P100401",
                             "name": {
                                 "value": "Boiler"
                             }
