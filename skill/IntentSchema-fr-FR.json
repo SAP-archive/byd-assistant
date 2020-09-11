@@ -238,7 +238,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Should I get you a compressor, a gas boiler or maybe a stove?"
+                        "value": "Voulez-vous que je vous achète un compresseur, une chaudière à gaz ou bien un fourneau?"
                     }
                 ]
             },
@@ -247,11 +247,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Tell me the quantity you need"
+                        "value": "Donnez moi la quantité qu'il vous faut"
                     },
                     {
                         "type": "PlainText",
-                        "value": "Ok, how many do you need?"
+                        "value": "D'accord, il vous en faut combien?"
                     }
                 ]
             },
@@ -260,7 +260,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "I will place your {ItemName} order. Do you confirm?"
+                        "value": "Je vais placer votre commande de {ItemName} . Vous confirmez?"
                     }
                 ]
             }
