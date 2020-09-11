@@ -239,8 +239,8 @@ function postPurchase(intent, session, callback) {
     var shouldEndSession = false;
     var speechOutput = "";
 
-    var ItemName = extractValue('ItemName', intent, session)
-    var Quantity = extractValue('Quantity', intent, session)
+    var ItemName = intent.slots.ItemName.resolutions.resolutionsPerAuthority[0].values[0].value.id
+    var Quantity = intent.slots.Quantity.value
 
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'ItemName', ItemName);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'Quantity', Quantity);
@@ -271,7 +271,7 @@ function postPurchase(intent, session, callback) {
                     {
                         "ID": "10",
                         "ItemProduct": {
-                            "ProductID": getByDProduct(ItemName)
+                            "ProductID": ItemName
                         },
                         "ItemScheduleLine": [
                             {
@@ -361,7 +361,6 @@ function getCall(endPoint, filter, callback) {
 function extractValue(attr, intent, session) {
 
     console.log("Extracting " + attr);
-
     if (session.attributes) {
         if (attr in session.attributes) {
             console.log("Session attribute " + attr + " is " + session.attributes[attr]);
@@ -424,25 +423,6 @@ function formatQuarter(input) {
 
 }
 
-function stringQuarter(input) {
-
-    if (input == '01' || input == 'Q1') {
-        return 'first';
-    }
-
-    if (input == '02' || input == 'Q2') {
-        return 'second';
-    }
-
-    if (input == '03' || input == 'Q3') {
-        return 'third';
-    }
-
-    if (input == '04' || input == 'Q4') {
-        return 'fourth';
-    }
-
-}
 
 function beginQuarter(quarter, year) {
 
