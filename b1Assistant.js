@@ -303,7 +303,7 @@ function postPurchase(intent, session, callback) {
 
                     const messageParams = {
                                         "%ORDER%": body.ID,
-                                        "%AMOUNT%":Math.round((body.NetAmount + Number.EPSILON) * 100) / 100, 
+                                        "%AMOUNT%":Math.round(body.NetAmount * 100) / 100, 
                                         "%CURRENCY%":body.NetAmountCurrencyCodeText}
                     message = MESSAGE.salesOrder(LANG, messageParams)
                     shouldEndSession = true;
