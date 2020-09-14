@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "b. y. d",
+            "invocationName": "s. a. p.",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -92,22 +92,34 @@
                     "values": [
                         {
                             "name": {
-                                "value": "quatrième"
+                                "value": "Q4",
+                                "synonyms": [
+                                    "quatrième"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "troisième"
+                                "value": "Q3",
+                                "synonyms": [
+                                    "troisième"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "second"
+                                "value": "Q2",
+                                "synonyms": [
+                                    "second"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "premier"
+                                "value": "Q1",
+                                "synonyms": [
+                                    "premier"
+                                ]
                             }
                         }
                     ]

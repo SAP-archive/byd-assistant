@@ -370,11 +370,15 @@ function extractValue(attr, intent, session) {
 
     console.log("No session attribute for " + attr);
 
-    if (intent.slots) {
-        if (attr in intent.slots && 'value' in intent.slots[attr]) {
+    if (intent.slots && attr in intent.slots) {
+        if ('resolutions' in intent.slots[attr]) {
+            console.log("Found Resolution for " + attr);
+            return intent.slots[attr].resolutions.resolutionsPerAuthority[0].values[0].value.name;
+        }else{
             return intent.slots[attr].value;
         }
     };
+    console.log("No Intent Slot for " + attr);
     return null;
 }
 
