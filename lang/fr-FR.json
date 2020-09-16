@@ -2,13 +2,13 @@
     "welcome":{
         "title": "Welcome to B.Y.D Assistant!",
         "message" :[
-            "Je suis votre assistante S. A. P. Comment puis-je vous aider?",
-            "C'est votre assistante S. A. P. comment je peux vous aider?",
-            "Bonjour, Ici votre assistante S. A. P. De quoi avez-vous besoin?"
+            "Je suis votre assistante éssapé Comment puis-je vous aider?",
+            "C'est votre assistante éssapé comment je peux vous aider?",
+            "Bonjour, Ici votre assistante éssapé De quoi avez-vous besoin?"
             ],
         "reprompt" :[
                 "Quelle est ma commande?",
-                "Vous pouvez dire : 'Aide' ou 'qu'est-ce que tu peux faire?' pour de l'assistance"
+                "Vous pouvez dire : 'Aide' pour de l'assistance"
                 ]
     },
     "help":
