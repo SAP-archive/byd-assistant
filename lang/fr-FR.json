@@ -2,9 +2,9 @@
     "welcome":{
         "title": "Welcome to B.Y.D Assistant!",
         "message" :[
-            "Bienvenu à l'assistant B. Y. D. Comment puis-je vous aider?",
-            "C'est votre assistant B. Y. D comment je peux vous aider?",
-            "Bonjour, Ici votre assistant B. Y. D. De quoi avez-vous besoin?"
+            "Je suis votre assistante S. A. P. Comment puis-je vous aider?",
+            "C'est votre assistante S. A. P. comment je peux vous aider?",
+            "Bonjour, Ici votre assistante S. A. P. De quoi avez-vous besoin?"
             ],
         "reprompt" :[
                 "Quelle est ma commande?",
@@ -15,7 +15,7 @@
     {
         "title": "How I can help.",
         "message" :[
-            "Actuellement, Je peux vous procurer les états des ventes et creer des commandes. Dites juste : donne moi le chiffre d'affaire, ou, J'ai besoin de matériel.",
+            "Actuellement, Je peux vous procurer les états des ventes et créer des commandes. Dites juste : donne moi le chiffre d'affaire, ou, J'ai besoin de matériel.",
             "Je suis capable de vous donner les détails du revenu par trimestre et générer des commandes d'achat. Il vous siffit de me demander."
             ],
         "reprompt" :[
@@ -27,7 +27,7 @@
     {
         "title": "Sales Reports",
         "message" :[
-            "Les dentes du %QUARTER% trimestre %YEAR% sont %AMOUNT% %CURRENCY%"
+            "Les ventes du trimestre %QUARTER% %YEAR% sont %AMOUNT% %CURRENCY%"
             ],
         "reprompt" :[]
     }, 
@@ -35,7 +35,7 @@
     {
         "title": "Sales Reports",
         "message" :[
-            "Désolée mais il n' y apas de vente sur le %QUARTER% trimestre %YEAR%"
+            "Désolée mais il n' y apas de vente sur le trimestre %QUARTER% %YEAR%"
             ],
         "reprompt" :[]
     },
@@ -44,7 +44,7 @@
     {
         "title": "Order Created",
         "message" :[
-            "Votre commande %ORDER% a été générée avec succès dans SAP. Le montant total de votre achat est %AMOUNT% %CURRENCY%"
+            "Votre commande numéro %ORDER% a été générée avec succès dans SAP. Le montant total de votre achat est %AMOUNT% %CURRENCY%"
             ],
         "reprompt" :[]
     },
