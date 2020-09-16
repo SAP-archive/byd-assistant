@@ -177,7 +177,8 @@ function getSalesInfo(intent, session, callback) {
     var speechOutput = "";
 
     var SalesQuarter = extractValue('SalesQuarter', intent, session)
-    var SalesYear = extractValue('SalesYear', intent, session)
+    var SalesYear = formatYear(extractValue('SalesYear', intent, session))
+
 
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'SalesQuarter', SalesQuarter);
     sessionAttributes = handleSessionAttributes(sessionAttributes, 'SalesYear', SalesYear);
@@ -386,7 +387,7 @@ function extractValue(attr, intent, session) {
 function handleSessionAttributes(sessionAttributes, attr, value) {
 
     //if Value exists as attribute than returns it
-    console.log("Previous " + attr + "is: " + value)
+    console.log("Previous " + attr + " is: " + value)
     if (value) {
         sessionAttributes[attr] = value;
     }
@@ -421,6 +422,11 @@ function formatQuarter(input) {
         return '04';
     }
 
+}
+
+function formatYear(year){
+    console.log("Formatting year - "+year)
+    return year.substring(0, 4);
 }
 
 
