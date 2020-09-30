@@ -2,9 +2,9 @@
     "welcome":{
         "title": "Welcome to B.Y.D Assistant!",
         "message" :[
-            "Benvenuto nell'assistente B.Y.D. Come posso aiutarti?",
-            "Questo è il tuo assistente B.Y.D. Come posso aiutarti?",
-            "Ciao, sono l'assistente B.Y.D. Di cosa hai bisogno?"
+            "Benvenuto nell'assistente LISA Come posso aiutarti?",
+            "Questo è il tuo assistente LISA Come posso aiutarti?",
+            "Ciao, sono l'assistente LISA Di cosa hai bisogno?"
             ],
         "reprompt" :[
                 "Qual'è il mio comando?",
