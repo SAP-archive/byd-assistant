@@ -92,25 +92,37 @@
             "types": [
                 {
                     "name": "SAP_QUARTERS",
-                    "values": [
+                     "values": [
                         {
                             "name": {
-                                "value": "quarto"
+                                "value": "Q4",
+                                "synonyms": [
+                                    "quarto"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "terzo"
+                                "value": "Q3",
+                                "synonyms": [
+                                    "terzo"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "secondo"
+                                "value": "Q2",
+                                "synonyms": [
+                                    "secondo"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "primo"
+                                "value": "Q1",
+                                "synonyms": [
+                                    "primo"
+                                ]
                             }
                         }
                     ]
