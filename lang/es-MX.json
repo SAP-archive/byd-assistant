@@ -1,0 +1,59 @@
+{
+    "welcome":{
+        "title": "Welcome to B.Y.D Assistant!",
+        "message" :[
+            "Welcome to B.Y.D . How can I help?",
+            "This is your B.Y.D Assistant . How can I help?",
+            "Hello, B.Y.D Assistant here. What do you need?"
+            ],
+        "reprompt" :[
+                "Cual es la orden?",
+                "Puedes decir: 'ayuda' o 'que puedes hacer' para asistencia"
+                ]
+    },
+    "help":
+    {
+        "title": "Como puedo ayudar.",
+        "message" :[
+            "Actualmente, puedo proporcionar informes de ventas y crear pedidos. Solo diga: muestrame mis numeros de venta, o necesito provisiones.",
+            "Puedo decirte las cifras de ventas trimestrales y crear una orden de venta. Sólo tienes que preguntar"
+            ],
+        "reprompt" :[
+                "Entonces, que va a ser?"
+                ]
+    },
+    
+    "sales":
+    {
+        "title": "reportes de ventas",
+        "message" :[
+            "Las ventas para el %QUARTER% trimestres de %YEAR% son de %AMOUNT% %CURRENCY%"
+            ],
+        "reprompt" :[]
+    }, 
+    "noSales":
+    {
+        "title": "reportes de ventas",
+        "message" :[
+            "Lo siento, pero no hay ventas para el %QUARTER% trimestre de %YEAR%"
+            ],
+        "reprompt" :[]
+    },
+
+    "salesOrder":
+    {
+        "title": "Orden creada",
+        "message" :[
+            "tu orden %ORDER% fue creada exitosamente. El monto total de la compra es de %AMOUNT% %CURRENCY%"
+            ],
+        "reprompt" :[]
+    },
+    "noSalesOrder":
+    {
+        "title": "No se pudo crear el pedido",
+        "message" :[
+            "Lo siento, hubo un problema al realizar su pedido. Por favor, inténtalo de nuevo más tarde."
+            ],
+        "reprompt" :[]
+    }
+}
