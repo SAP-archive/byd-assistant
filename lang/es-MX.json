@@ -2,9 +2,10 @@
     "welcome":{
         "title": "Welcome to B.Y.D Assistant!",
         "message" :[
-            "Welcome to B.Y.D . How can I help?",
-            "This is your B.Y.D Assistant . How can I help?",
-            "Hello, B.Y.D Assistant here. What do you need?"
+            "Bienvenido . Como te puedo ayudar?",
+            "Este es tu asistente . Como ayudo?",
+            "Hola, el asitente inteligente aqui. Que necesitas?",
+            "Hola soy Lupita, en que te ayudo?"
             ],
         "reprompt" :[
                 "Cual es la orden?",
