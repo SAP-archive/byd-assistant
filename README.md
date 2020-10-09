@@ -1,6 +1,14 @@
-# ByD Assistant ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
+[![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.svg)](https://github.com/firstcontributions/open-source-badges)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
 
-A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business by Design and Amazon Echo
+# ByD Assistant 
+A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business ByDesign and Amazon Echo
+
+## Contributions  
+
+
+
 
 ## Pre Requisites
 * A free trial account on  [SAP Cloud Platform](https://cloudplatform.sap.com) with **Cloud Foundry Trial** initialized

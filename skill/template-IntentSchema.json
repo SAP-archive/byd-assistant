@@ -1,0 +1,287 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "b. y. d",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "help",
+                        "how can you help me",
+                        "what can you do",
+                        "what do you do"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "MakePurchase",
+                    "slots": [
+                        {
+                            "name": "ItemName",
+                            "type": "SAP_ITEMS",
+                            "samples": [
+                                "{ItemName}"
+                            ]
+                        },
+                        {
+                            "name": "Quantity",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "buy me {Quantity} unities of {ItemName}",
+                        "buy me {ItemName}",
+                        "{ItemName}",
+                        "I need supplies",
+                        "{Quantity} unities",
+                        "{Quantity} packs",
+                        "{Quantity} pieces",
+                        "I need {Quantity} unities",
+                        "I need {Quantity} packs",
+                        "I need {Quantity} pieces"
+                    ]
+                },
+                {
+                    "name": "SalesInfo",
+                    "slots": [
+                        {
+                            "name": "SalesQuarter",
+                            "type": "SAP_QUARTERS",
+                            "samples": [
+                                "{SalesQuarter}",
+                                "{SalesQuarter} quarter"
+                            ]
+                        },
+                        {
+                            "name": "SalesYear",
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "{SalesYear}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{SalesQuarter}",
+                        "{SalesYear}",
+                        "{SalesQuarter} quarter of {SalesYear}",
+                        "{SalesQuarter} of {SalesYear}",
+                        "show me sales numbers",
+                        "give me sales info"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                }
+            ],
+            "types": [
+                {
+                    "name": "SAP_QUARTERS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Q4",
+                                "synonyms": [
+                                    "fourth"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Q3",
+                                "synonyms": [
+                                    "third"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Q2",
+                                "synonyms": [
+                                    "second"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Q1",
+                                "synonyms": [
+                                    "first"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "SAP_ITEMS",
+                    "values": [
+                        {
+                            "id": "P120101",
+                            "name": {
+                                "value": "Compressor"
+                            }
+                        },
+                        {
+                            "id": "P110401",
+                            "name": {
+                                "value": "Stove"
+                            }
+                        },
+                        {
+                            "id": "P100401",
+                            "name": {
+                                "value": "Boiler"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "SalesInfo",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "SalesQuarter",
+                            "type": "SAP_QUARTERS",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.976776143579.376416263902"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.261777776730.36457673745.187009367255"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "SalesYear",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.976776143579.810689598335"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "MakePurchase",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.805251402209"
+                    },
+                    "slots": [
+                        {
+                            "name": "ItemName",
+                            "type": "SAP_ITEMS",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.805251402209.1302449313357"
+                            }
+                        },
+                        {
+                            "name": "Quantity",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.805251402209.408328358357"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Slot.Validation.261777776730.36457673745.187009367255",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "I didn't get it. "
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "I am sorry, could you repeat that?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Pardon?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.976776143579.810689598335",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "For what year?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.976776143579.376416263902",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "For what quarter?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.805251402209.1302449313357",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Should I get you a compressor, a gas boiler or maybe a stove?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.805251402209.408328358357",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tell me the quantity you need"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Ok, how many do you need?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.805251402209",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "I will place your {ItemName} order. Do you confirm?"
+                    }
+                ]
+            }
+        ]
+    }
+}
