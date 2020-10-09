@@ -6,8 +6,10 @@
 A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business ByDesign and Amazon Echo
 
 ## Contributions  
+We are open to contributions specially to adapt the ByD Assistatnt to other languanges. We can support all the available [Alexa Locales](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html). If you want to help, submit a Pull Request with a lang file and a IntentSchema of your language of choice. Please use the [Lang Template](lang/template-lang.json) and the [Intent Schema Template](skill/template-IntentSchema.json) as a starting point. 
+Name then accordingly to the to the respective [Local Code](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html#h2-code-changes)
 
-
+If you have questions, please ask.
 
 
 ## Pre Requisites
