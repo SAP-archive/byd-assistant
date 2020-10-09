@@ -95,22 +95,34 @@
                     "values": [
                         {
                             "name": {
-                                "value": "fourth"
+                                "value": "Q4",
+                                "synonyms": [
+                                    "fourth"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "third"
+                                "value": "Q3",
+                                "synonyms": [
+                                    "third"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "second"
+                                "value": "Q2",
+                                "synonyms": [
+                                    "second"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "first"
+                                "value": "Q1",
+                                "synonyms": [
+                                    "first"
+                                ]
                             }
                         }
                     ]
