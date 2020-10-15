@@ -56,7 +56,9 @@ You will see your backend URL (to be used in the next step)
 * Follow the steps int he [skill](skill/) folder to create your Alexa Skill and have it connected to the SAP Cloud Platform
 
 ## Test it
-* [Now you can talk to your SAP Business By Design](https://youtu.be/tWBh9zDPaJc)
+Now you can talk to your SAP Business By Design!
+Demos: [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)
+[🇮🇹](https://youtu.be/54JmuJ-1zeE) [🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184?s=20)
 
 
 ## License
