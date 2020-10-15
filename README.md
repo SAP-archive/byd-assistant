@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
 
-# ByD Assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184?s=20)
+# ByD Assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
 A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business ByDesign and Amazon Echo
 
 ## Contributions  
@@ -58,7 +58,7 @@ You will see your backend URL (to be used in the next step)
 ## Test it
 Now you can talk to your SAP Business By Design!
 Demos: [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)
-[🇮🇹](https://youtu.be/54JmuJ-1zeE) [🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184?s=20)
+[🇮🇹](https://youtu.be/54JmuJ-1zeE) [🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
 
 
 ## License
