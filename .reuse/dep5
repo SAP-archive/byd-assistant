@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: byd-assistant
 Upstream-Contact: Ralphive <>
-Source: https://github.com/Ralphive/byd-assistant
+Source: https://github.com/SAP-Samples/byd-assistant
 
 # Sample paragraph, commented out:
 #
