@@ -1,3 +1,4 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-Samples/byd-assistant)](https://api.reuse.software/info/github.com/SAP-Samples/byd-assistant)
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.svg)](https://github.com/firstcontributions/open-source-badges)
 [![License: Apache2](https://img.shields.io/badge/License-Apache2-green.svg)](https://opensource.org/licenses/Apache-2.0)
 ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
