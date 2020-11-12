@@ -2,41 +2,27 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
 
-# ByD Assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
-A fork from [B1 Assistant](https://github.com/B1SA/b1Assistant) to integrate SAP Business ByDesign and Amazon Echo
+# byd-assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
+_Originally forked from [B1 Assistant](https://github.com/B1SA/b1Assistant)_
 
-## Contributions  
-We are open to contributions specially to adapt the ByD Assistatnt to other languanges. We can support all the available [Alexa Locales](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html). If you want to help, submit a Pull Request with a lang file and a IntentSchema of your language of choice. Please use the [Lang Template](lang/template-lang.json) and the [Intent Schema Template](skill/template-IntentSchema.json) as a starting point.
-Name then accordingly to the to the respective [Local Code](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html#h2-code-changes) Please don't change any of the %PLACEHOLDERS%.
+A sample [Alexa Skill](https://www.amazon.co.uk/b?ie=UTF8&node=10068517031) to demonstrate the integration between Amazon Echo x SAP Business ByDesign
 
-If you have questions, please ask.
+## Requirements
+*  [Install the Cloud Foundry CLI](https://developers.sap.com/tutorials/cp-cf-download-cli.html)
+*  [Learn the Fundamentals of SCP Cloud Foundry](https://developers.sap.com/tutorials/cp-cf-fundamentals.html)
 
-
-## Pre Requisites
-* A free trial account on  [SAP Cloud Platform](https://cloudplatform.sap.com) with **Cloud Foundry Trial** initialized
-* Install and configure the [Cloud Foundry Command Line Interface (CLI)](https://developers.sap.com/tutorials/cp-cf-download-cli.html) on your machine.
-
-## Installation
+## Deployment
 ### STEP 1: ByD OData API
 * Import [this sales orders model](https://github.com/SAP-samples/sapbydesign-api-samples/blob/master/Custom%20OData%20Services/khsalesorder.xml) in the [SAP Businesss ByDesign Odata Services](https://www.youtube.com/watch?v=z6mF_1hFths)
 * Activate the models and take note of the **service URL**
 
 ### STEP 2: Deployment of the ByD Assistant Backend in the SAP Cloud Platform
 * Clone/Download this repository
-* Update the application name in the [manifest.yml](manifest.yml)
 * From the root directory, using the [Cloud Foundry CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html), push your app to the SAP CP Cloud Foundry
 ```sh
-$ cf push
+$ cf push --random-route
 ```
-Then set the Environment Variables accordingly
-```sh
-$ cf set-env <your app name> SMB_SERVER http://<your byd server>
-$ cf set-env <your app name> SMB_PORT <Serverr Port>
-$ cf set-env <your app name> SMB_PATH <Service URL from the model imported previously>
-$ cf set-env <your app name> SMB_AUTH <[Base64 Encoded] user:password>
-$ cf set-env <your app name> SMB_DEFAULT_BP <A Business Partner Code for the Sales Order>
-```
-For Example:
+Then set the Environment Variables according to the example:
 ```sh
 $ cf set-env bydassistant SMB_SERVER https://my023666.sapbydesign.com
 $ cf set-env bydassistant SMB_PORT ""
@@ -44,6 +30,8 @@ $ cf set-env bydassistant SMB_PATH /sap/byd/odata/cust/v1/khsalesorderdemo
 $ cf set-env bydassistant SMB_AUTH bWFuYWdlcjptYW5hZ2VyMTIz
 $ cf set-env bydassistant SMB_DEFAULT_BP CP100110
 ```
+_AUTH is [Base64 Encoded](https://www.base64encode.org/) user:password*_
+
 Restart your application (so it can read the new environment variables)
 ```sh
 $ cf restart bydassistant
@@ -58,8 +46,15 @@ You will see your backend URL (to be used in the next step)
 ## Test it
 Now you can talk to your SAP Business By Design!
 Demos: [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)
-[🇮🇹](https://youtu.be/54JmuJ-1zeE) [🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
+[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
 
+## Support and Contributions  
+This repository is provided "as-is". With no Warranty or support
+
+We are open to contributions specially to adapt the ByD Assistatnt to other languanges. We can support all the available [Alexa Locales](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html). If you want to help, submit a Pull Request with a lang file and a IntentSchema of your language of choice. Please use the [Lang Template](lang/template-lang.json) and the [Intent Schema Template](skill/template-IntentSchema.json) as a starting point.
+Name then accordingly to the to the respective [Local Code](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html#h2-code-changes) Please don't change any of the %PLACEHOLDERS%.
+
+If you have questions, please ask.
 
 ## License
-BYD Assistant prototype is released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/MIT.
+Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the LICENSE file.
