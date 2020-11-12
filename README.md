@@ -1,5 +1,5 @@
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.svg)](https://github.com/firstcontributions/open-source-badges)
-[![License: MIT](https://img.shields.io/badge/License-Apache2-green.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache2](https://img.shields.io/badge/License-Apache2-green.svg)](https://opensource.org/licenses/Apache-2.0)
 ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
 
 # byd-assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
@@ -57,4 +57,4 @@ Name then accordingly to the to the respective [Local Code](https://developer.am
 If you have questions, please ask.
 
 ## License
-Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the LICENSE file.
+Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSES/Apache-2.0.txt) file.
