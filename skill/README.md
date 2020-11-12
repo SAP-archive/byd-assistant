@@ -1,4 +1,4 @@
-## This files are NOT part of the backend Application
+## These files are NOT part of the backend Application
 
 They should be used to create the [Alexa Skill](https://developer.amazon.com/alexa-skills-kit/learn) responsible for making the requests to the nodejs app
 
