@@ -1,5 +1,5 @@
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.svg)](https://github.com/firstcontributions/open-source-badges)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-Apache2-green.svg)](https://opensource.org/licenses/MIT)
 ![CI](https://github.com/Ralphive/byDAssistant/workflows/CI/badge.svg)
 
 # byd-assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
