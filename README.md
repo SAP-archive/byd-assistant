@@ -9,8 +9,10 @@ _Originally forked from [B1 Assistant](https://github.com/B1SA/b1Assistant)_
 A sample [Alexa Skill](https://www.amazon.co.uk/b?ie=UTF8&node=10068517031) to demonstrate the integration between Amazon Echo x SAP Business ByDesign
 
 ## Requirements
-*  [Install the Cloud Foundry CLI](https://developers.sap.com/tutorials/cp-cf-download-cli.html)
-*  [Learn the Fundamentals of SCP Cloud Foundry](https://developers.sap.com/tutorials/cp-cf-fundamentals.html)
+* [Install the Cloud Foundry CLI](https://developers.sap.com/tutorials/cp-cf-download-cli.html)
+* [Learn the Fundamentals of SCP Cloud Foundry](https://developers.sap.com/tutorials/cp-cf-fundamentals.html)
+* [Amazon developer account](https://developer.amazon.com/)
+
 
 ## Deployment
 ### STEP 1: ByD OData API
