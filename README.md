@@ -2,6 +2,8 @@
 [![License: Apache2](https://img.shields.io/badge/License-Apache2-green.svg)](https://opensource.org/licenses/Apache-2.0)
 ![CI](https://github.com/SAP-Samples/byd-assistant/workflows/CI/badge.svg)
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.svg)](https://github.com/firstcontributions/open-source-badges)
+[![Not Maintained](https://img.shields.io/badge/Maintenance%20Level-Not%20Maintained-yellow.svg)](https://gist.github.com/cheerfulstoic/d107229326a01ff0f333a1d3476e068d)
+
 
 # byd-assistant [🇬🇧](https://youtu.be/tWBh9zDPaJc)[🇫🇷](https://youtu.be/NLAif0wcHuU)[🇮🇹](https://youtu.be/54JmuJ-1zeE)[🇲🇽](https://twitter.com/Ralphive/status/1316678233220317184)
 _Originally forked from [B1 Assistant](https://github.com/B1SA/b1Assistant)_
